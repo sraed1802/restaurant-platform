@@ -7,12 +7,14 @@
 # Paths below are relative to the repository root.
 
 [build]
-command = "npm ci && npm run build:customer"
+# Netlify already runs `npm install` before this command; do not run `npm ci` again
+# (lockfile can drift; ci would fail while install succeeds).
+command = "npm run build:customer"
 publish = "apps/customer/dist"
 edge_functions = "netlify/edge-functions"
 
 [build.environment]
-NODE_VERSION = "20"
+NODE_VERSION = "22"
 
 [dev]
 command = "npm run dev"

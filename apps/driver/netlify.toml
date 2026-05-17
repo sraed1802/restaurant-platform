@@ -2,11 +2,11 @@
 # UI: Base directory = apps/driver
 
 [build]
-command = "cd ../.. && npm ci && npm run build:driver"
+command = "cd ../.. && npm run build:driver"
 publish = "dist"
 
 [build.environment]
-NODE_VERSION = "20"
+NODE_VERSION = "22"
 
 [dev]
 command = "npm run dev"

@@ -2,11 +2,11 @@
 # UI: Base directory = apps/admin
 
 [build]
-command = "cd ../.. && npm ci && npm run build:admin"
+command = "cd ../.. && npm run build:admin"
 publish = "dist"
 
 [build.environment]
-NODE_VERSION = "20"
+NODE_VERSION = "22"
 
 [dev]
 command = "npm run dev"

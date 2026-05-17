@@ -1,5 +1,7 @@
 # Dependencies
 node_modules/
+# Monorepo: only root package-lock.json (no per-app locks)
+apps/*/package-lock.json
 
 # Build output
 dist/
