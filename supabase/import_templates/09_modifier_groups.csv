@@ -1,0 +1,2 @@
+id,name_en,name_ar,selection_type,min_selections,max_selections,is_required,display_order
+00000000-0000-0000-0000-000000000301,Size,الحجم,single,1,1,true,1

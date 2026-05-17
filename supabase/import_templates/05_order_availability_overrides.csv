@@ -1,0 +1,2 @@
+organization_id,cluster_id,property_id,starts_at,ends_at,mode,label,message_en,message_ar
+__ORG_UUID__,__CLUSTER_UUID__,__PROPERTY_UUID__,2026-06-16T00:00:00+03:00,2026-06-16T23:59:59+03:00,closed,__OVERRIDE_LABEL__,Closed for holiday.,مغلق بسبب عطلة.

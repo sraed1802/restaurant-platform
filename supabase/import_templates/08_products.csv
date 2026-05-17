@@ -1,0 +1,2 @@
+id,category_id,name_en,name_ar,description_en,description_ar,base_price,image_url,is_available,is_featured,prep_time_minutes,calories,tags_json,display_order
+00000000-0000-0000-0000-000000000201,00000000-0000-0000-0000-000000000101,Soup of the Day,شوربة اليوم,Daily fresh soup,شوربة طازجة يومية,18.000,,true,false,10,,"[""vegetarian""]",1

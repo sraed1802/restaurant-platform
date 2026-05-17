@@ -1,0 +1,62 @@
+# netlify/netlify.customer.toml
+# Deploy this as the customer site at order.restaurant.qa
+
+[build]
+  base = "apps/customer"
+  command = "cd ../.. && npm ci && npm run build:customer"
+  publish = "dist"
+  edge_functions = "../../netlify/edge-functions"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# SPA routing
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Cache headers for static assets
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Cache headers for API routes via edge functions
+[[headers]]
+  for = "/api/menu"
+  [headers.values]
+    Cache-Control = "public, s-maxage=300, stale-while-revalidate=60"
+    X-Content-Type-Options = "nosniff"
+
+[[headers]]
+  for = "/api/promotions"
+  [headers.values]
+    Cache-Control = "public, s-maxage=120, stale-while-revalidate=30"
+
+[[headers]]
+  for = "/api/suggestions"
+  [headers.values]
+    Cache-Control = "public, s-maxage=900, stale-while-revalidate=60"
+
+# Security headers (frame-ancestors allows admin guest-app preview iframe)
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Content-Security-Policy = "frame-ancestors 'self' https://ops.restaurant.qa http://localhost:5174 http://127.0.0.1:5174 https://*.netlify.app https://*.trycloudflare.com;"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(self)"
+
+# Edge functions
+[[edge_functions]]
+  function = "menu-cache"
+  path = "/api/menu"
+
+[[edge_functions]]
+  function = "promo-cache"
+  path = "/api/promotions"
+
+[[edge_functions]]
+  function = "ai-suggestions"
+  path = "/api/suggestions"

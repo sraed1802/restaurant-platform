@@ -1,0 +1,60 @@
+# Netlify site: customer (public ordering)
+# UI: Base directory = apps/customer (this file is picked up automatically)
+
+[build]
+command = "cd ../.. && npm ci && npm run build:customer"
+publish = "dist"
+edge_functions = "../../netlify/edge-functions"
+
+[build.environment]
+NODE_VERSION = "20"
+
+[dev]
+command = "npm run dev"
+
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200
+
+[[headers]]
+for = "/assets/*"
+[headers.values]
+Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+for = "/api/menu"
+[headers.values]
+Cache-Control = "public, s-maxage=300, stale-while-revalidate=60"
+X-Content-Type-Options = "nosniff"
+
+[[headers]]
+for = "/api/promotions"
+[headers.values]
+Cache-Control = "public, s-maxage=120, stale-while-revalidate=30"
+
+[[headers]]
+for = "/api/suggestions"
+[headers.values]
+Cache-Control = "public, s-maxage=900, stale-while-revalidate=60"
+
+# frame-ancestors: allow admin guest-app preview iframe
+[[headers]]
+for = "/*"
+[headers.values]
+Content-Security-Policy = "frame-ancestors 'self' https://ops.restaurant.qa http://localhost:5174 http://127.0.0.1:5174 https://*.netlify.app https://*.trycloudflare.com;"
+X-Content-Type-Options = "nosniff"
+Referrer-Policy = "strict-origin-when-cross-origin"
+Permissions-Policy = "camera=(), microphone=(), geolocation=(self)"
+
+[[edge_functions]]
+function = "menu-cache"
+path = "/api/menu"
+
+[[edge_functions]]
+function = "promo-cache"
+path = "/api/promotions"
+
+[[edge_functions]]
+function = "ai-suggestions"
+path = "/api/suggestions"

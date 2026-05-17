@@ -1,0 +1,6 @@
+key,value_type,value,description
+delivery_fee,number,5.000,Fixed delivery fee in QAR for outside-delivery orders
+free_delivery_enabled,boolean,false,Enable free delivery for outside-delivery orders
+free_delivery_min_order,number,0.000,Minimum order value for free delivery on outside-delivery orders
+payment_gateway_settings,json,"{""stripe_enabled"":false,""stripe_mode"":""test"",""checkout_label"":""Pay online with Stripe""}",Stripe checkout runtime settings for guest ordering
+operator_notifications,json,"{""email_enabled"":false,""email_recipients"":[],""telegram_enabled"":false,""telegram_chat_ids"":[],""notify_on_order_created"":true,""notify_on_order_cancelled"":true}",Operator notification channel settings

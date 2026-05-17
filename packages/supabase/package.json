@@ -1,0 +1,16 @@
+{
+  "name": "@rms/supabase",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./client.ts",
+  "exports": {
+    ".": "./client.ts",
+    "./client": "./client.ts",
+    "./realtime": "./realtime.ts",
+    "./types": "./types.ts"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.105.3"
+  }
+}

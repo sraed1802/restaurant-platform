@@ -1,0 +1,31 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="512" height="512" fill="#faf8f4"/>
+  
+  <!-- Restaurant icon -->
+  <g transform="translate(256, 256)">
+    <!-- Plate -->
+    <circle cx="0" cy="20" r="80" fill="#e8e0d0" stroke="#b8975a" stroke-width="4"/>
+    <circle cx="0" cy="20" r="60" fill="#faf8f4"/>
+    
+    <!-- Fork -->
+    <rect x="-60" y="-40" width="6" height="80" fill="#8b6e3a" rx="3"/>
+    <rect x="-60" y="-40" width="20" height="6" fill="#8b6e3a" rx="3"/>
+    <rect x="-60" y="-25" width="15" height="6" fill="#8b6e3a" rx="3"/>
+    <rect x="-60" y="-10" width="10" height="6" fill="#8b6e3a" rx="3"/>
+    
+    <!-- Knife -->
+    <rect x="54" y="-40" width="6" height="80" fill="#8b6e3a" rx="3"/>
+    <polygon points="60,-40 75,-35 75,-25 60,-20" fill="#c0c0c0"/>
+    
+    <!-- Food on plate -->
+    <ellipse cx="0" cy="15" rx="40" ry="15" fill="#d4b07a"/>
+    <circle cx="-10" cy="10" r="8" fill="#8fbc8f"/>
+    <circle cx="10" cy="12" r="6" fill="#ffa500"/>
+    <rect x="-5" y="5" width="10" height="8" fill="#ff6347" rx="2"/>
+  </g>
+  
+  <!-- Restaurant text -->
+  <text x="256" y="420" font-family="Georgia, serif" font-size="28" font-weight="600" text-anchor="middle" fill="#0e0e0e">RMS</text>
+  <text x="256" y="450" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#b8975a">Restaurant</text>
+</svg>

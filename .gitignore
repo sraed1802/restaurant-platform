@@ -1,0 +1,53 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+**/dist/
+
+# Environment secrets (never commit)
+.env
+.env.local
+.env.*.local
+**/.env
+!**/.env.example
+!NETLIFY_*.env.example
+!SUPABASE_PRODUCTION_SECRETS.env.example
+
+# Netlify local
+.netlify/
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+.vs/
+*.log
+npm-debug.log*
+*.tsbuildinfo
+
+# Android signing keys (never commit)
+*.jks
+*.keystore
+**/keystore.properties
+
+# Supabase local
+supabase/.branches/
+supabase/.temp/
+
+# Android / Capacitor build artifacts
+**/android/.gradle/
+**/android/build/
+**/android/app/build/
+**/android/local.properties
+**/android/captures/
+**/android/.cxx/
+
+# Playwright / test artifacts
+test-results/
+playwright-report/
+blob-report/
+
+# Generated (optional local SQL dumps)
+supabase/generated/

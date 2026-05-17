@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html>
+  <body style="font-family: system-ui, sans-serif; line-height: 1.5">
+    <h2>Your sign-in code</h2>
+    <p>Enter this code in the app:</p>
+    <p style="font-size: 28px; font-weight: 700; letter-spacing: 6px">{{ .Token }}</p>
+    <p>Or sign in with this link:</p>
+    <p><a href="{{ .ConfirmationURL }}">Sign in</a></p>
+  </body>
+</html>

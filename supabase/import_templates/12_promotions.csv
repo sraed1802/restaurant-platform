@@ -1,0 +1,2 @@
+id,code,name_en,name_ar,type,discount_value,discount_type,min_order_value,max_discount_cap,usage_limit,usage_limit_per_customer,conditions_json,ai_rank_score,is_active,is_featured,condition_type,valid_from,valid_until,valid_from_time,valid_until_time
+00000000-0000-0000-0000-000000000501,WELCOME10,Welcome 10%,خصم ترحيبي 10%,code,10.000,percentage,0.000,,,1,{},0.8000,true,false,none,2026-01-01T00:00:00Z,,,

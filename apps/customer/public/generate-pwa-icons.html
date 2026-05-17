@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate PWA Icons</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #faf8f4;
+        }
+        .icon-preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .icon-item {
+            text-align: center;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        canvas {
+            border: 1px solid #ccc;
+            margin: 10px 0;
+        }
+        button {
+            background: #b8975a;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #9a8048;
+        }
+        .status {
+            margin: 20px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .info { background: #d1ecf1; color: #0c5460; }
+    </style>
+</head>
+<body>
+    <h1>🍽️ RMS Restaurant - PWA Icon Generator</h1>
+    
+    <div class="status info">
+        <strong>Instructions:</strong> Click the button below to generate all required PWA icons. 
+        Each icon will be automatically downloaded to your device.
+    </div>
+
+    <button onclick="generateAllIcons()">🎨 Generate All PWA Icons</button>
+    <button onclick="previewIcons()">👁️ Preview Icons</button>
+
+    <div id="status"></div>
+    <div id="preview" class="icon-preview"></div>
+
+    <script>
+        const sizes = [72, 96, 128, 144, 152, 192, 384, 512];
+        
+        function drawIcon(canvas, size) {
+            const ctx = canvas.getContext('2d');
+            canvas.width = size;
+            canvas.height = size;
+            
+            // Background
+            ctx.fillStyle = '#faf8f4';
+            ctx.fillRect(0, 0, size, size);
+            
+            // Circle background
+            ctx.fillStyle = '#b8975a';
+            ctx.globalAlpha = 0.2;
+            ctx.beginPath();
+            ctx.arc(size/2, size/2, size/3, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.globalAlpha = 1.0;
+            
+            // Restaurant icon
+            ctx.font = `${size/3}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('🍽️', size/2, size/2);
+            
+            // RMS text
+            ctx.fillStyle = '#0e0e0e';
+            ctx.font = `bold ${size/12}px Arial`;
+            ctx.fillText('RMS', size/2, size * 0.85);
+        }
+        
+        function generateIcon(size) {
+            const canvas = document.createElement('canvas');
+            drawIcon(canvas, size);
+            
+            return new Promise((resolve) => {
+                canvas.toBlob((blob) => {
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.download = `icon-${size}x${size}.png`;
+                    link.href = url;
+                    link.click();
+                    
+                    setTimeout(() => URL.revokeObjectURL(url), 100);
+                    resolve();
+                });
+            });
+        }
+        
+        async function generateAllIcons() {
+            const status = document.getElementById('status');
+            status.innerHTML = '<div class="info">Generating icons... Please wait.</div>';
+            
+            for (const size of sizes) {
+                await generateIcon(size);
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+            
+            status.innerHTML = '<div class="success">✅ All icons generated and downloaded! Place them in the public folder.</div>';
+        }
+        
+        function previewIcons() {
+            const preview = document.getElementById('preview');
+            preview.innerHTML = '';
+            
+            sizes.forEach(size => {
+                const canvas = document.createElement('canvas');
+                drawIcon(canvas, size);
+                
+                const item = document.createElement('div');
+                item.className = 'icon-item';
+                item.innerHTML = `
+                    <canvas width="${size}" height="${size}"></canvas>
+                    <div>icon-${size}x${size}.png</div>
+                `;
+                
+                const itemCanvas = item.querySelector('canvas');
+                const ctx = itemCanvas.getContext('2d');
+                ctx.drawImage(canvas, 0, 0);
+                
+                preview.appendChild(item);
+            });
+        }
+        
+        // Auto-preview on load
+        window.addEventListener('load', previewIcons);
+    </script>
+</body>
+</html>

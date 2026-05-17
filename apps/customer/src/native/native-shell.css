@@ -1,0 +1,667 @@
+/**
+ * Loaded only in the Capacitor shell (see main.tsx).
+ * Scoped under html.rms-native-customer so web never sees these tokens.
+ */
+html.rms-native-customer {
+  /**
+   * Android gesture bar often reports 0 for env(safe-area-inset-bottom) unless the WebView
+   * is configured for edge-to-edge; keep a minimum so tabs and CTAs stay tappable.
+   */
+  --native-gesture-pad: max(env(safe-area-inset-bottom, 0px), 16px);
+  --native-tab-h: calc(3.25rem + var(--native-gesture-pad));
+  --native-header-h: 3.25rem;
+  --native-radius: 14px;
+  --native-radius-sm: 10px;
+  /* Shell chrome (defaults; Android refines below) */
+  --native-app-chrome-surface: var(--surface-elevated);
+  --native-app-chrome-border: var(--border-strong);
+  --native-app-tab-ink: var(--ink-muted);
+  --native-app-tab-ink-active: var(--gold-dark);
+  --native-app-tab-active-bg: rgba(184, 151, 90, 0.12);
+  --native-app-header-shadow: var(--elev-1);
+  --native-app-tabbar-shadow: 0 -8px 24px rgba(14, 14, 14, 0.08);
+}
+
+/**
+ * Android: slightly stronger chrome separation and tab contrast (Material-adjacent)
+ * without replacing tenant brand tokens.
+ */
+html.rms-android-customer.rms-native-customer {
+  --native-gesture-pad: max(env(safe-area-inset-bottom, 0px), 22px);
+  --native-app-chrome-surface: color-mix(in srgb, var(--surface-elevated) 94%, var(--ink) 6%);
+  --native-app-chrome-border: color-mix(in srgb, var(--border-strong) 85%, var(--ink) 15%);
+  --native-app-tab-ink: color-mix(in srgb, var(--ink-muted) 88%, var(--ink) 12%);
+  --native-app-tab-ink-active: var(--gold-dark);
+  --native-app-tab-active-bg: rgba(184, 151, 90, 0.16);
+  --native-app-header-shadow: 0 2px 12px rgba(14, 14, 14, 0.06);
+  --native-app-tabbar-shadow: 0 -10px 28px rgba(14, 14, 14, 0.1);
+}
+
+html.rms-native-customer body {
+  background: var(--cream);
+  overscroll-behavior-y: none;
+}
+
+/* Welcome route: avoid cream body / main gap under the dark screen */
+html.rms-native-customer.rms-native-welcome-route body {
+  background: #0a0806;
+}
+
+.native-app-root {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: var(--native-tab-h);
+}
+
+.native-lang-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem;
+  border-radius: 999px;
+  background: rgba(14, 14, 14, 0.06);
+  border: 1px solid var(--border);
+}
+
+.native-lang-btn {
+  min-height: 40px;
+  padding: 0.45rem 1rem;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--ink-muted);
+  cursor: pointer;
+}
+
+.native-lang-btn--active {
+  background: rgba(184, 151, 90, 0.22);
+  color: var(--gold-dark);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;
+}
+
+html.rms-native-customer [dir='rtl'] .native-lang-toggle {
+  flex-direction: row-reverse;
+}
+
+.native-app-header {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-height: var(--native-header-h);
+  padding: 0.5rem calc(1rem + env(safe-area-inset-right, 0px)) 0.5rem
+    calc(1rem + env(safe-area-inset-left, 0px));
+  padding-top: calc(0.5rem + env(safe-area-inset-top, 0px));
+  background: var(--native-app-chrome-surface);
+  border-bottom: 1px solid var(--native-app-chrome-border);
+  box-shadow: var(--native-app-header-shadow);
+  z-index: 50;
+}
+
+.native-app-header.native-app-header--lang {
+  justify-content: center;
+}
+
+.native-app-header.native-app-header--with-title {
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+html.rms-native-customer [dir='rtl'] .native-app-header.native-app-header--with-title {
+  flex-direction: row-reverse;
+}
+
+.native-app-screen-title {
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 42vw;
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.native-app-header--with-title .native-lang-toggle {
+  flex-shrink: 0;
+}
+
+.native-app-brand {
+  font-weight: 800;
+  font-size: 1.05rem;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.native-app-main {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.native-screen {
+  max-width: 100%;
+  min-height: 100%;
+}
+
+.native-tabbar {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 60;
+  display: flex;
+  align-items: stretch;
+  justify-content: space-around;
+  min-height: var(--native-tab-h);
+  padding-bottom: var(--native-gesture-pad);
+  padding-inline: env(safe-area-inset-left, 0px) env(safe-area-inset-right, 0px);
+  background: var(--native-app-chrome-surface);
+  border-top: 1px solid var(--native-app-chrome-border);
+  box-shadow: var(--native-app-tabbar-shadow);
+}
+
+.native-tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  padding: 0.35rem 0.25rem 0.5rem;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--native-app-tab-ink);
+  text-decoration: none;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: color var(--transition), background var(--transition);
+}
+
+.native-tab[aria-current='page'],
+.native-tab--active {
+  color: var(--native-app-tab-ink-active);
+  background: var(--native-app-tab-active-bg);
+}
+
+html.rms-android-customer.rms-native-customer .native-tab {
+  font-size: 0.68rem;
+}
+
+.native-tab-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.native-tab-svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: currentColor;
+}
+
+/* App-style density: tighten menu page chrome inside native shell */
+html.rms-native-customer .native-screen-menu .menu-page {
+  padding-bottom: calc(4rem + var(--native-gesture-pad));
+  padding-inline: max(0.75rem, env(safe-area-inset-left, 0px)) max(0.75rem, env(safe-area-inset-right, 0px));
+}
+
+html.rms-native-customer .native-screen-menu .menu-hero {
+  margin-inline: -1rem;
+  border-radius: 0 0 var(--native-radius) var(--native-radius);
+}
+
+html.rms-native-customer .native-screen-cart .cart-page,
+html.rms-native-customer .native-screen-generic {
+  padding-inline: 1rem;
+  padding-bottom: calc(2rem + var(--native-gesture-pad));
+}
+
+html.rms-native-customer .native-screen-cart .cart-summary {
+  position: static;
+  top: auto;
+}
+
+html.rms-native-customer .native-screen-cart .cart-page {
+  /* Tab bar + floating checkout bar (~4.25rem) + breathing room */
+  padding-bottom: calc(var(--native-tab-h) + 5.25rem);
+}
+
+/* CartPage mobile checkout strip: sit above fixed tab bar (CartPage uses bottom: 1rem by default) */
+html.rms-native-customer .cart-mobile-bar {
+  bottom: calc(var(--native-tab-h) + 0.5rem) !important;
+  left: max(0.75rem, env(safe-area-inset-left, 0px)) !important;
+  right: max(0.75rem, env(safe-area-inset-right, 0px)) !important;
+  z-index: 54 !important;
+}
+
+html.rms-native-customer [dir='rtl'] .cart-mobile-bar {
+  left: max(0.75rem, env(safe-area-inset-left, 0px));
+  right: max(0.75rem, env(safe-area-inset-right, 0px));
+}
+
+/* Menu: tighter grid + readable max width on foldables / large phones */
+html.rms-native-customer .native-screen-menu .product-grid {
+  gap: 0.75rem;
+  max-width: 28rem;
+  margin-inline: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.rms-native-customer .product-card {
+    animation: none !important;
+    animation-delay: 0ms !important;
+  }
+
+  html.rms-native-customer .native-tab-badge {
+    animation: none;
+  }
+
+  html.rms-native-customer .product-card:hover .product-image-wrap img {
+    transform: none;
+  }
+}
+
+html.rms-native-customer .product-card--native .product-info {
+  padding: 0.75rem 0.85rem;
+}
+
+html.rms-native-customer .product-card--native .product-name {
+  font-size: 1.05rem;
+}
+
+html.rms-native-customer .product-card--native .product-desc {
+  margin-bottom: 0.45rem;
+}
+
+/* Cart line items: keep horizontal thumb + body on native phones (avoid tall 16:10 stacks) */
+@media (max-width: 640px) {
+  html.rms-native-customer .native-screen-cart .cart-item {
+    grid-template-columns: 88px minmax(0, 1fr);
+    gap: 0.85rem;
+  }
+
+  html.rms-native-customer .native-screen-cart .cart-item-media {
+    aspect-ratio: 1 / 1;
+    max-height: 88px;
+    align-self: start;
+  }
+
+  html.rms-native-customer .native-screen-cart .cart-item-topline,
+  html.rms-native-customer .native-screen-cart .cart-item-controls {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  html.rms-native-customer .native-screen-cart .cart-item-total-block {
+    text-align: end;
+    min-width: 5.5rem;
+  }
+
+  html.rms-native-customer .native-screen-cart .qty-row {
+    justify-content: flex-start;
+  }
+
+  html.rms-native-customer .native-screen-cart .remove-btn {
+    width: auto;
+    min-height: 44px;
+  }
+}
+
+html.rms-android-customer.rms-native-customer .native-screen-cart .qty-row button {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.native-app-root--welcome {
+  padding-bottom: 0;
+  min-height: 100dvh;
+  min-height: 100svh;
+  background:
+    radial-gradient(ellipse 100% 60% at 50% 0%, rgba(184, 151, 90, 0.2), transparent 50%),
+    linear-gradient(165deg, #1a1410 0%, #120e0b 55%, #0a0806 100%);
+}
+
+.native-app-main--welcome {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background:
+    radial-gradient(ellipse 100% 60% at 50% 0%, rgba(184, 151, 90, 0.2), transparent 50%),
+    linear-gradient(165deg, #1a1410 0%, #120e0b 55%, #0a0806 100%);
+}
+
+.native-app-header-tagline {
+  font-size: 0.75rem;
+  color: var(--ink-muted);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.native-cart-toast {
+  position: fixed;
+  z-index: 56;
+  left: max(0.75rem, env(safe-area-inset-left, 0px));
+  right: max(0.75rem, env(safe-area-inset-right, 0px));
+  bottom: calc(var(--native-tab-h) + 0.5rem);
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.75rem 0.85rem;
+  border-radius: var(--native-radius);
+  background: linear-gradient(135deg, #1f1a14, #14110d);
+  color: #fff8e7;
+  border: 1px solid rgba(244, 211, 122, 0.35);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.28);
+}
+
+.native-cart-toast-check {
+  flex-shrink: 0;
+  width: 1.75rem;
+  height: 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: rgba(80, 200, 120, 0.25);
+  color: #9fe8b5;
+  font-weight: 800;
+  font-size: 0.95rem;
+}
+
+.native-cart-toast-text {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.88rem;
+  line-height: 1.35;
+}
+
+.native-cart-toast-text strong {
+  font-weight: 700;
+  color: #fff;
+}
+
+.native-cart-toast-dismiss {
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff8e7;
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.native-tab-icon--with-badge {
+  position: relative;
+}
+
+.native-tab-badge {
+  position: absolute;
+  top: -6px;
+  inset-inline-end: -8px;
+  min-width: 1.1rem;
+  height: 1.1rem;
+  padding: 0 0.28rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #c45c4a, #a33d2e);
+  color: #fff;
+  font-size: 0.58rem;
+  font-weight: 800;
+  line-height: 1.1rem;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  animation: native-tab-badge-pop 0.38s ease;
+}
+
+@keyframes native-tab-badge-pop {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  55% {
+    transform: scale(1.12);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Native menu: category + search / filter sheet */
+html.rms-native-customer .native-cat-bar {
+  max-width: var(--container-wide, 1100px);
+  margin: 0 auto 0.85rem;
+  padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+html.rms-native-customer .native-cat-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+html.rms-native-customer .native-cat-select {
+  width: 100%;
+  min-height: 48px;
+  padding: 0.55rem 0.85rem;
+  border-radius: var(--native-radius-sm);
+  border: 1px solid var(--border-strong);
+  background: var(--surface-elevated);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+html.rms-native-customer .native-menu-search-row {
+  max-width: var(--container-wide, 1100px);
+  margin: 0 auto 0.75rem;
+  padding: 0 1rem;
+  display: flex;
+  gap: 0.55rem;
+  align-items: stretch;
+}
+
+html.rms-native-customer .native-menu-search-input {
+  flex: 1;
+  min-width: 0;
+  min-height: 48px;
+  padding: 0.55rem 0.85rem;
+  border-radius: var(--native-radius-sm);
+  border: 1px solid var(--border-strong);
+  background: var(--surface-elevated);
+  font-size: 1rem;
+}
+
+html.rms-native-customer .native-menu-filter-open {
+  flex-shrink: 0;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  min-width: 4.5rem;
+  padding: 0.35rem 0.45rem;
+  border-radius: var(--native-radius-sm);
+  border: 1px solid var(--border-strong);
+  background: var(--surface-elevated);
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink);
+  cursor: pointer;
+  position: relative;
+}
+
+html.rms-native-customer .native-menu-filter-open-icon {
+  display: flex;
+  color: var(--gold-dark);
+}
+
+html.rms-native-customer .native-menu-filter-open-icon svg {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+html.rms-native-customer .native-menu-filter-dot {
+  position: absolute;
+  top: 6px;
+  inset-inline-end: 8px;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #c45c4a;
+}
+
+html.rms-native-customer .native-menu-filter-sheet {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+html.rms-native-customer .native-menu-filter-backdrop {
+  position: absolute;
+  inset: 0;
+  border: none;
+  padding: 0;
+  margin: 0;
+  background: rgba(14, 12, 10, 0.55);
+  cursor: pointer;
+}
+
+html.rms-native-customer .native-menu-filter-panel {
+  position: relative;
+  width: 100%;
+  max-height: min(88vh, 640px);
+  border-radius: var(--native-radius) var(--native-radius) 0 0;
+  background: var(--surface-elevated);
+  border: 1px solid var(--border-strong);
+  border-bottom: none;
+  box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.18);
+  display: flex;
+  flex-direction: column;
+  padding-bottom: var(--native-gesture-pad);
+}
+
+html.rms-native-customer .native-menu-filter-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.1rem 0.65rem;
+  border-bottom: 1px solid var(--border);
+}
+
+html.rms-native-customer .native-menu-filter-title {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+html.rms-native-customer .native-menu-filter-done {
+  border: none;
+  background: rgba(184, 151, 90, 0.2);
+  color: var(--gold-dark);
+  font-weight: 800;
+  font-size: 0.85rem;
+  padding: 0.45rem 0.85rem;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+html.rms-native-customer .native-menu-filter-body {
+  overflow: auto;
+  padding: 1rem 1.1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+html.rms-native-customer .native-menu-filter-section-label {
+  margin: 0.35rem 0 0;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+html.rms-native-customer .native-menu-dietary-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+html.rms-native-customer .native-menu-dietary-chip {
+  min-height: 44px;
+  padding: 0.45rem 0.85rem;
+  border-radius: 999px;
+  border: 2px solid var(--border);
+  background: var(--surface);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+html.rms-native-customer .native-menu-dietary-chip.active {
+  border-color: rgba(184, 151, 90, 0.85);
+  background: rgba(184, 151, 90, 0.15);
+  color: var(--gold-dark);
+}
+
+html.rms-native-customer .native-menu-select {
+  width: 100%;
+  min-height: 48px;
+  padding: 0.55rem 0.75rem;
+  border-radius: var(--native-radius-sm);
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+html.rms-native-customer .native-menu-filter-clear {
+  margin-top: 0.35rem;
+  min-height: 48px;
+  border-radius: var(--native-radius-sm);
+  border: 1px dashed var(--border-strong);
+  background: transparent;
+  font-weight: 700;
+  color: var(--ink-muted);
+  cursor: pointer;
+}
+
+html.rms-native-customer .native-menu-allergen-note {
+  margin: 0.25rem 0 0;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--ink-muted);
+}

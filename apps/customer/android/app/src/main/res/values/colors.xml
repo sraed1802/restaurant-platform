@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary Brand Colors -->
+    <color name="colorPrimary">#B8975A</color> <!-- Gold -->
+    <color name="colorPrimaryDark">#8B6E3A</color> <!-- Gold Dark -->
+    <color name="colorAccent">#B8975A</color>
+
+    <!-- UI Colors -->
+    <color name="ink">#0E0E0E</color>
+    <color name="cream">#FAF8F4</color>
+    <color name="cream_2">#F2EDE4</color>
+
+    <!-- Status Bar and Navigation Bar -->
+    <color name="status_bar_color">#FAF8F4</color>
+    <color name="nav_bar_color">#FAF8F4</color>
+
+    <!-- Launcher -->
+    <color name="ic_launcher_background">#FAF8F4</color>
+
+    <!-- Native splash (APK cold start) — warm culinary dark, matches in-app hero tone -->
+    <color name="splash_background">#14100D</color>
+    <color name="splash_icon_background">#1C1611</color>
+</resources>

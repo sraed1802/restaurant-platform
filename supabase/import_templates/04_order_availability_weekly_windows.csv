@@ -1,0 +1,8 @@
+organization_id,cluster_id,property_id,day_of_week,opens_at,closes_at,is_enabled
+__ORG_UUID__,__CLUSTER_UUID__,__PROPERTY_UUID__,0,10:00,23:00,true
+__ORG_UUID__,__CLUSTER_UUID__,__PROPERTY_UUID__,1,10:00,23:00,true
+__ORG_UUID__,__CLUSTER_UUID__,__PROPERTY_UUID__,2,10:00,23:00,true
+__ORG_UUID__,__CLUSTER_UUID__,__PROPERTY_UUID__,3,10:00,23:00,true
+__ORG_UUID__,__CLUSTER_UUID__,__PROPERTY_UUID__,4,10:00,23:00,true
+__ORG_UUID__,__CLUSTER_UUID__,__PROPERTY_UUID__,5,10:00,23:59,true
+__ORG_UUID__,__CLUSTER_UUID__,__PROPERTY_UUID__,6,10:00,23:59,true

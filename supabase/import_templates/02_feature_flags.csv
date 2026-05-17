@@ -1,0 +1,5 @@
+flag_key,description,enabled,rollout_percentage,rules_json,organization_id,cluster_id,property_id
+stripePayments,Enable Stripe-hosted checkout,false,100,{},__ORG_UUID__,__CLUSTER_UUID__,__PROPERTY_UUID__
+hotelRoomDelivery,Enable hotel room delivery workflows,false,100,{},__ORG_UUID__,__CLUSTER_UUID__,__PROPERTY_UUID__
+orderScheduling,Enable restaurant order availability scheduling,true,100,{},__ORG_UUID__,__CLUSTER_UUID__,__PROPERTY_UUID__
+multiLocation,Enable multi-location behavior,false,100,{},__ORG_UUID__,__CLUSTER_UUID__,__PROPERTY_UUID__

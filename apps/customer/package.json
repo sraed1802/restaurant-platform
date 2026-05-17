@@ -1,0 +1,41 @@
+{
+  "name": "@rms/customer",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.3.3",
+    "@capacitor/app": "^8.1.0",
+    "@capacitor/core": "^8.3.3",
+    "@capacitor/haptics": "^8.0.2",
+    "@rms/platform": "file:../../packages/platform",
+    "@rms/supabase": "file:../../packages/supabase",
+    "@sentry/react": "^7.64.0",
+    "@sentry/tracing": "^7.64.0",
+    "@supabase/supabase-js": "^2.39.0",
+    "@tanstack/react-query": "^5.90.5",
+    "framer-motion": "^10.18.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.21.0",
+    "zustand": "^4.4.7"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.4.2",
+    "@testing-library/react": "^14.2.1",
+    "@testing-library/user-event": "^14.5.2",
+    "@types/react": "^18.2.66",
+    "@types/react-dom": "^18.2.22",
+    "@vitejs/plugin-react": "^6.0.1",
+    "jsdom": "^24.0.0",
+    "typescript": "^5.2.2",
+    "vite": "^8.0.12",
+    "vitest": "^1.4.0"
+  }
+}

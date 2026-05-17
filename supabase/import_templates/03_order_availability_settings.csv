@@ -1,0 +1,2 @@
+organization_id,cluster_id,property_id,manual_mode,timezone,closure_message_en,closure_message_ar
+__ORG_UUID__,__CLUSTER_UUID__,__PROPERTY_UUID__,scheduled,Asia/Qatar,Orders are currently closed.,الطلبات مغلقة حالياً.

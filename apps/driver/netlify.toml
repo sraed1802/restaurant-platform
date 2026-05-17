@@ -1,0 +1,29 @@
+# Netlify site: driver (delivery portal)
+# UI: Base directory = apps/driver
+
+[build]
+command = "cd ../.. && npm ci && npm run build:driver"
+publish = "dist"
+
+[build.environment]
+NODE_VERSION = "20"
+
+[dev]
+command = "npm run dev"
+
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200
+
+[[headers]]
+for = "/assets/*"
+[headers.values]
+Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+for = "/*"
+[headers.values]
+X-Content-Type-Options = "nosniff"
+Referrer-Policy = "strict-origin-when-cross-origin"
+Permissions-Policy = "camera=(), microphone=(), geolocation=(self)"

@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Maazym</string>
+    <string name="title_activity_main">Maazym</string>
+    <string name="package_name">com.maazym.customer</string>
+    <string name="custom_url_scheme">com.maazym.customer</string>
+    <string name="shortcut_admin_label">Admin Portal</string>
+    <string name="shortcut_driver_label">Driver App</string>
+</resources>

@@ -1,0 +1,254 @@
+/* apps/customer/src/index.css */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap');
+
+:root {
+  --ink:       #0e0e0e;
+  --ink-soft:  #3d3d3d;
+  --ink-muted: #888;
+  --cream:     #faf8f4;
+  --cream-2:   #f2ede4;
+  --cream-3:   #e8e0d0;
+  --gold:      #b8975a;
+  --gold-light:#d4b07a;
+  --gold-dark: #8b6e3a;
+  --surface:   #ffffff;
+  --surface-elevated: #ffffff;
+  --border:    rgba(14,14,14,0.10);
+  --border-strong: rgba(14,14,14,0.20);
+  /* Semantic */
+  --success: #1d6b4a;
+  --success-muted: rgba(29, 107, 74, 0.12);
+  --success-border: rgba(29, 107, 74, 0.25);
+  --warning: #b45309;
+  --warning-muted: rgba(180, 83, 9, 0.12);
+  --warning-border: rgba(180, 83, 9, 0.22);
+  --danger: #b91c1c;
+  --danger-muted: rgba(185, 28, 28, 0.1);
+  --danger-border: rgba(185, 28, 28, 0.25);
+  --focus-ring: rgba(184, 151, 90, 0.45);
+  --elev-1: 0 1px 2px rgba(14,14,14,0.06);
+  --elev-2: 0 4px 16px rgba(14,14,14,0.08);
+  --elev-3: 0 12px 40px rgba(14,14,14,0.12);
+  --shadow-sm: 0 1px 3px rgba(14,14,14,0.06), 0 1px 2px rgba(14,14,14,0.04);
+  --shadow-md: 0 4px 12px rgba(14,14,14,0.08), 0 2px 6px rgba(14,14,14,0.04);
+  --shadow-lg: 0 12px 36px rgba(14,14,14,0.10), 0 4px 12px rgba(14,14,14,0.06);
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body:    'DM Sans', system-ui, sans-serif;
+  --transition:   200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out-luxe: cubic-bezier(0.22, 1, 0.36, 1);
+  /* Type scale */
+  --text-overline: 0.65rem;
+  --text-caption: 0.75rem;
+  --text-body-sm: 0.875rem;
+  --text-body: 1rem;
+  --text-body-lg: 1.125rem;
+  --text-h3: 1.25rem;
+  --text-h2: 1.5rem;
+  --text-h1: 2rem;
+  --text-display: clamp(2rem, 5vw, 2.75rem);
+  --container-narrow: 42rem;
+  --container-wide: 75rem;
+}
+
+/* Dark mode variables */
+[data-theme="dark"] {
+  --ink:       #faf8f4;
+  --ink-soft:  #e8e0d0;
+  --ink-muted: #b8975a;
+  --cream:     #0e0e0e;
+  --cream-2:   #1a1a1a;
+  --cream-3:   #252525;
+  --gold:      #d4b07a;
+  --gold-light:#e6c89a;
+  --gold-dark: #b8975a;
+  --surface:   #1a1a1a;
+  --surface-elevated: #222222;
+  --border:    rgba(250,248,244,0.15);
+  --border-strong: rgba(250,248,244,0.25);
+  --success: #34d399;
+  --success-muted: rgba(52, 211, 153, 0.15);
+  --success-border: rgba(52, 211, 153, 0.32);
+  --warning: #fbbf24;
+  --warning-muted: rgba(251, 191, 36, 0.12);
+  --warning-border: rgba(251, 191, 36, 0.32);
+  --danger: #f87171;
+  --danger-muted: rgba(248, 113, 113, 0.15);
+  --danger-border: rgba(248, 113, 113, 0.34);
+  --focus-ring: rgba(212, 176, 122, 0.5);
+  --elev-1: 0 1px 2px rgba(0,0,0,0.4);
+  --elev-2: 0 4px 16px rgba(0,0,0,0.45);
+  --elev-3: 0 12px 40px rgba(0,0,0,0.55);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.4), 0 2px 6px rgba(0,0,0,0.3);
+  --shadow-lg: 0 12px 36px rgba(0,0,0,0.5), 0 4px 12px rgba(0,0,0,0.4);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--ink);
+  min-height: 100dvh;
+  line-height: 1.6;
+  background-color: var(--cream);
+  /* Layered “21st” depth: soft gold wash + corner light (UI/UX Pro Max: hierarchy without harsh flat) */
+  background-image:
+    radial-gradient(ellipse 120% 75% at 50% -20%, rgba(184, 151, 90, 0.28), transparent 55%),
+    radial-gradient(ellipse 60% 50% at 100% 15%, rgba(232, 224, 208, 0.75), transparent 50%),
+    radial-gradient(ellipse 55% 45% at 0% 85%, rgba(184, 151, 90, 0.14), transparent 52%),
+    repeating-linear-gradient(
+      -18deg,
+      transparent,
+      transparent 14px,
+      rgba(14, 14, 14, 0.02) 14px,
+      rgba(14, 14, 14, 0.02) 15px
+    );
+  background-attachment: fixed;
+}
+
+[data-theme="dark"] body {
+  background-image:
+    radial-gradient(ellipse 115% 70% at 50% -18%, rgba(212, 176, 122, 0.22), transparent 52%),
+    radial-gradient(ellipse 55% 45% at 100% 0%, rgba(55, 48, 36, 0.85), transparent 48%),
+    radial-gradient(ellipse 50% 40% at 0% 100%, rgba(184, 151, 90, 0.12), transparent 50%);
+}
+
+/* Direction support */
+[dir="rtl"] {
+  font-family: 'DM Sans', 'Segoe UI', 'Cairo', system-ui, sans-serif;
+}
+
+/* Gold divider */
+.gold-line {
+  width: 48px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  margin: 0 auto;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--cream-3); border-radius: 2px; }
+
+/* Focus */
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+  border-radius: 2px;
+  box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+.typ-overline {
+  font-size: var(--text-overline);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.typ-display {
+  font-family: var(--font-display);
+  font-size: var(--text-display);
+  font-weight: 300;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.container-page {
+  width: 100%;
+  max-width: var(--container-wide);
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+
+/* Buttons base */
+button { cursor: pointer; font-family: inherit; border: none; background: none; }
+
+/* Input base */
+input, textarea, select {
+  font-family: inherit;
+  font-size: 1rem;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1rem;
+  width: 100%;
+  transition: border-color var(--transition);
+}
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+/* Animations */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+@keyframes pulse-gold {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(184,151,90,0.3); }
+  50%       { box-shadow: 0 0 0 6px rgba(184,151,90,0); }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.animate-fade-up { animation: fadeUp 0.4s var(--ease-out-luxe) both; }
+.animate-fade-in { animation: fadeIn 0.3s var(--ease-out-luxe) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .animate-fade-up,
+  .animate-fade-in {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .skeleton {
+    animation: none !important;
+    background: var(--cream-2);
+  }
+}
+
+/* Skeleton loader */
+.skeleton {
+  background: linear-gradient(90deg, var(--cream-2) 25%, var(--cream-3) 50%, var(--cream-2) 75%);
+  background-size: 400px 100%;
+  animation: shimmer 1.4s infinite;
+  border-radius: var(--radius-sm);
+}
+
+/* RTL utilities */
+.ltr { direction: ltr; }
+.rtl { direction: rtl; }
+
+/**
+ * Capacitor Android only: `rms-android-customer` is set in nativeCustomerShell.ts.
+ * Stops vertical rubber-band overscroll from fighting MenuHero scroll-linked motion.
+ */
+html.rms-android-customer,
+html.rms-android-customer body {
+  overscroll-behavior-y: none;
+}

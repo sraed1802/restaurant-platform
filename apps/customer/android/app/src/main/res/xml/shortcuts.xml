@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:shortcutId="admin_shortcut"
+        android:enabled="true"
+        android:icon="@drawable/ic_brand_logo"
+        android:shortcutShortLabel="@string/shortcut_admin_label">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.maazym.customer"
+            android:targetClass="com.maazym.customer.MainActivity"
+            android:data="com.maazym.customer://admin" />
+    </shortcut>
+    <shortcut
+        android:shortcutId="driver_shortcut"
+        android:enabled="true"
+        android:icon="@drawable/ic_brand_logo"
+        android:shortcutShortLabel="@string/shortcut_driver_label">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.maazym.customer"
+            android:targetClass="com.maazym.customer.MainActivity"
+            android:data="com.maazym.customer://driver" />
+    </shortcut>
+</shortcuts>

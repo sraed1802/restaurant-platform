@@ -1,0 +1,15 @@
+# netlify/netlify.driver.toml
+# Reference copy — deploy using apps/driver/netlify.toml (set Netlify base directory to apps/driver)
+
+[build]
+base = "apps/driver"
+command = "cd ../.. && npm ci && npm run build:driver"
+publish = "dist"
+
+[build.environment]
+NODE_VERSION = "20"
+
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200

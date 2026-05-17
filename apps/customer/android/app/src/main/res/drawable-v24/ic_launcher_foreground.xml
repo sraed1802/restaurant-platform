@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Legacy @drawable/ic_launcher_foreground: delegates to brand asset (matches ic_brand_logo_inset). -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/ic_brand_logo_inset" />
+</layer-list>

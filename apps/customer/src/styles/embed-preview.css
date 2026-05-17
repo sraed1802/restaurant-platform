@@ -1,0 +1,47 @@
+/* Admin settings iframe: keep the menu hero (overview) in the visible viewport */
+html.rms-embed-preview {
+  overflow: hidden;
+}
+
+html.rms-embed-preview body {
+  overflow: hidden;
+}
+
+html.rms-embed-preview .enhanced-layout {
+  min-height: 100%;
+}
+
+html.rms-embed-preview .enhanced-main {
+  overflow-y: auto;
+  max-height: 100dvh;
+  -webkit-overflow-scrolling: touch;
+}
+
+html.rms-embed-preview .enhanced-footer,
+html.rms-embed-preview .header-announcement,
+html.rms-embed-preview .order-progress-banner {
+  display: none !important;
+}
+
+html.rms-embed-preview .enhanced-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+
+html.rms-embed-preview .header-main {
+  padding-block: 0.5rem;
+}
+
+html.rms-embed-preview .brand-tagline {
+  display: none;
+}
+
+html.rms-embed-preview .menu-page {
+  padding-bottom: 2rem;
+}
+
+html.rms-embed-preview .menu-hero {
+  margin-bottom: 1rem;
+  padding-block: 1.5rem 1.25rem;
+}

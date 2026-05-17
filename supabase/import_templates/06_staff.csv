@@ -1,0 +1,3 @@
+id,name,phone,app_role,is_active,created_by
+__AUTH_USER_UUID_ADMIN__,__ADMIN_NAME__,__ADMIN_PHONE__,admin,true,
+__AUTH_USER_UUID_MANAGER__,__MANAGER_NAME__,__MANAGER_PHONE__,manager,true,__AUTH_USER_UUID_ADMIN__

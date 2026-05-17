@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "composite": true,
+    "skipLibCheck": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "types": ["node"],
+    "paths": {
+      "vite": ["../../node_modules/vite"],
+      "@vitejs/plugin-react": ["../../node_modules/@vitejs/plugin-react"]
+    }
+  },
+  "include": ["vite.config.ts"]
+}

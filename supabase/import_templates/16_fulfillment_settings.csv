@@ -1,0 +1,2 @@
+organization_id,cluster_id,property_id,fulfillment_mode
+__ORG_UUID__,__CLUSTER_UUID__,__PROPERTY_UUID__,outside_delivery

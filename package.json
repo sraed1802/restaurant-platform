@@ -1,0 +1,38 @@
+{
+  "name": "rms-platform",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:customer": "npm -w apps/customer run dev",
+    "dev:admin": "npm -w apps/admin run dev",
+    "dev:driver": "npm -w apps/driver run dev",
+    "tunnel:customer": "cloudflared tunnel --url http://localhost:5173",
+    "tunnel:admin": "cloudflared tunnel --url http://localhost:5174",
+    "tunnel:driver": "cloudflared tunnel --url http://localhost:5175",
+    "build:customer": "npm -w apps/customer run build",
+    "build:admin": "npm -w apps/admin run build",
+    "build:driver": "npm -w apps/driver run build",
+    "build:web": "npm run build:customer && npm run build:admin && npm run build:driver",
+    "android:sync:customer": "npm run build:customer && cd apps/customer && npx cap sync android",
+    "android:sync:admin": "npm run build:admin && cd apps/admin && npx cap sync android",
+    "android:sync:driver": "npm run build:driver && cd apps/driver && npx cap sync android",
+    "generate:restaurant-import": "node scripts/generate-restaurant-import-sql.mjs --input supabase/import_templates --output supabase/generated/restaurant_import.generated.sql"
+  },
+  "dependencies": {
+    "@capacitor/cli": "^8.3.3",
+    "@capacitor/core": "^8.3.3",
+    "@supabase/supabase-js": "^2.105.3",
+    "dotenv": "^17.4.2"
+  },
+  "devDependencies": {
+    "@netlify/edge-functions": "^3.0.6",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "playwright": "^1.59.1",
+    "vitest": "^4.1.5"
+  }
+}

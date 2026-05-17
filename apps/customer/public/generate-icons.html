@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generate PWA Icons</title>
+</head>
+<body>
+    <canvas id="canvas" width="512" height="512"></canvas>
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Draw icon
+        ctx.fillStyle = '#faf8f4';
+        ctx.fillRect(0, 0, 512, 512);
+        
+        // Draw restaurant icon
+        ctx.translate(256, 256);
+        
+        // Plate
+        ctx.beginPath();
+        ctx.arc(0, 20, 80, 0, 2 * Math.PI);
+        ctx.fillStyle = '#e8e0d0';
+        ctx.fill();
+        ctx.strokeStyle = '#b8975a';
+        ctx.lineWidth = 4;
+        ctx.stroke();
+        
+        ctx.beginPath();
+        ctx.arc(0, 20, 60, 0, 2 * Math.PI);
+        ctx.fillStyle = '#faf8f4';
+        ctx.fill();
+        
+        // Fork
+        ctx.fillStyle = '#8b6e3a';
+        ctx.fillRect(-60, -40, 6, 80);
+        ctx.fillRect(-60, -40, 20, 6);
+        ctx.fillRect(-60, -25, 15, 6);
+        ctx.fillRect(-60, -10, 10, 6);
+        
+        // Knife
+        ctx.fillRect(54, -40, 6, 80);
+        ctx.beginPath();
+        ctx.moveTo(60, -40);
+        ctx.lineTo(75, -35);
+        ctx.lineTo(75, -25);
+        ctx.lineTo(60, -20);
+        ctx.closePath();
+        ctx.fillStyle = '#c0c0c0';
+        ctx.fill();
+        
+        // Food
+        ctx.fillStyle = '#d4b07a';
+        ctx.beginPath();
+        ctx.ellipse(0, 15, 40, 15, 0, 0, 2 * Math.PI);
+        ctx.fill();
+        
+        ctx.fillStyle = '#8fbc8f';
+        ctx.beginPath();
+        ctx.arc(-10, 10, 8, 0, 2 * Math.PI);
+        ctx.fill();
+        
+        ctx.fillStyle = '#ffa500';
+        ctx.beginPath();
+        ctx.arc(10, 12, 6, 0, 2 * Math.PI);
+        ctx.fill();
+        
+        ctx.fillStyle = '#ff6347';
+        ctx.fillRect(-5, 5, 10, 8);
+        
+        ctx.translate(-256, -256);
+        
+        // Text
+        ctx.fillStyle = '#0e0e0e';
+        ctx.font = 'bold 28px Georgia';
+        ctx.textAlign = 'center';
+        ctx.fillText('RMS', 256, 420);
+        
+        ctx.fillStyle = '#b8975a';
+        ctx.font = '16px Arial';
+        ctx.fillText('Restaurant', 256, 450);
+        
+        // Generate different sizes
+        const sizes = [72, 96, 128, 144, 152, 192, 384, 512];
+        
+        sizes.forEach(size => {
+            const tempCanvas = document.createElement('canvas');
+            tempCanvas.width = size;
+            tempCanvas.height = size;
+            const tempCtx = tempCanvas.getContext('2d');
+            tempCtx.drawImage(canvas, 0, 0, size, size);
+            
+            // Create download link
+            const link = document.createElement('a');
+            link.download = `icon-${size}x${size}.png`;
+            link.href = tempCanvas.toDataURL();
+            link.click();
+        });
+    </script>
+</body>
+</html>

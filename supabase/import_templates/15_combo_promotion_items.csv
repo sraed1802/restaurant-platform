@@ -1,0 +1,2 @@
+id,organization_id,cluster_id,property_id,combo_promotion_id,product_id,item_role,quantity,display_order
+00000000-0000-0000-0000-000000000701,__ORG_UUID__,__CLUSTER_UUID__,__PROPERTY_UUID__,00000000-0000-0000-0000-000000000601,00000000-0000-0000-0000-000000000201,main,1,1
