@@ -1,9 +1,14 @@
 # Netlify site: admin (operator console)
-# UI: Base directory = apps/admin
+#
+# Netlify UI:
+#   Base directory: (empty = repository root)
+#   Config file: apps/admin/netlify.toml
+#
+# Paths below are relative to the repository root.
 
 [build]
-command = "cd ../.. && npm run build:admin"
-publish = "dist"
+command = "npm run build:admin"
+publish = "apps/admin/dist"
 
 [build.environment]
 NODE_VERSION = "22"

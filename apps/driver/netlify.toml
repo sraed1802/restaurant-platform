@@ -1,9 +1,14 @@
 # Netlify site: driver (delivery portal)
-# UI: Base directory = apps/driver
+#
+# Netlify UI:
+#   Base directory: (empty = repository root)
+#   Config file: apps/driver/netlify.toml
+#
+# Paths below are relative to the repository root.
 
 [build]
-command = "cd ../.. && npm run build:driver"
-publish = "dist"
+command = "npm run build:driver"
+publish = "apps/driver/dist"
 
 [build.environment]
 NODE_VERSION = "22"

@@ -2,9 +2,8 @@
 # Reference copy — deploy using apps/admin/netlify.toml (set Netlify base directory to apps/admin)
 
 [build]
-base = "apps/admin"
-command = "cd ../.. && npm ci && npm run build:admin"
-publish = "dist"
+  command = "npm run build:admin"
+  publish = "apps/admin/dist"
 
 [build.environment]
 NODE_VERSION = "20"
