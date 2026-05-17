@@ -1,10 +1,15 @@
 # Netlify site: customer (public ordering)
-# UI: Base directory = apps/customer (this file is picked up automatically)
+#
+# Netlify UI (required for edge functions + monorepo):
+#   Base directory: (leave empty = repository root)
+#   Build settings → Config file: apps/customer/netlify.toml
+#
+# Paths below are relative to the repository root.
 
 [build]
-command = "cd ../.. && npm ci && npm run build:customer"
-publish = "dist"
-edge_functions = "../../netlify/edge-functions"
+command = "npm ci && npm run build:customer"
+publish = "apps/customer/dist"
+edge_functions = "netlify/edge-functions"
 
 [build.environment]
 NODE_VERSION = "20"

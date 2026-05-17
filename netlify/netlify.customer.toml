@@ -2,10 +2,9 @@
 # Deploy this as the customer site at order.restaurant.qa
 
 [build]
-  base = "apps/customer"
-  command = "cd ../.. && npm ci && npm run build:customer"
-  publish = "dist"
-  edge_functions = "../../netlify/edge-functions"
+  command = "npm ci && npm run build:customer"
+  publish = "apps/customer/dist"
+  edge_functions = "netlify/edge-functions"
 
 [build.environment]
   NODE_VERSION = "20"

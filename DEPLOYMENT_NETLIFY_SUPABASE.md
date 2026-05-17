@@ -15,11 +15,13 @@ Create **three** separate Netlify sites from the same Git repository. In each si
 
 All three builds install dependencies from the **repository root** (`npm ci`) so workspace packages (`@rms/platform`, `@rms/supabase`) resolve correctly.
 
-| Site | Base directory | Publish | Env template | Suggested domain |
-|------|----------------|---------|--------------|------------------|
-| Customer | `apps/customer` | `dist` | `NETLIFY_CUSTOMER.env.example` | `https://order.restaurant.qa` |
-| Admin | `apps/admin` | `dist` | `NETLIFY_ADMIN.env.example` | `https://ops.restaurant.qa` |
-| Driver | `apps/driver` | `dist` | `NETLIFY_DRIVER.env.example` | `https://driver.restaurant.qa` |
+| Site | Base directory | Config file | Publish | Env template |
+|------|----------------|-------------|---------|--------------|
+| Customer | *(repo root — empty)* | `apps/customer/netlify.toml` | `apps/customer/dist` | `NETLIFY_CUSTOMER.env.example` |
+| Admin | `apps/admin` | *(default)* | `dist` | `NETLIFY_ADMIN.env.example` |
+| Driver | `apps/driver` | *(default)* | `dist` | `NETLIFY_DRIVER.env.example` |
+
+Customer must use **repository root** as base so `edge_functions = netlify/edge-functions` stays inside the repo (Netlify rejects `../../` paths).
 
 Local verification before push:
 
