@@ -7,8 +7,8 @@ import { isHotelRoomDeliveryAddress } from '@rms/supabase/fulfillment'
 import { supabase } from '../lib/supabase'
 import { fetchCustomerProfileRow, updateCustomerProfile } from '../services/customerProfile'
 import { deleteCustomerAccount } from '../services/deleteCustomerAccount'
+import { PRIVACY_DELETION_EMAIL } from '../content/legalCopy'
 import { useSessionStoreHydrated } from '../hooks/useSessionStoreHydrated'
-import { useRestaurantSettings } from '../hooks/useRestaurantSettings'
 import { useCartStore } from '../store/cartStore'
 
 function newBlankAddress(): OutsideDeliveryAddress {
@@ -41,7 +41,6 @@ export default function ProfilePage() {
   const [deleteConfirm, setDeleteConfirm] = useState(false)
   const [deleteBusy, setDeleteBusy] = useState(false)
   const [deleteError, setDeleteError] = useState<string | null>(null)
-  const { settings: restaurantSettings } = useRestaurantSettings()
 
   useEffect(() => {
     if (!sessionHydrated) return
@@ -132,7 +131,7 @@ export default function ProfilePage() {
 
   if (!sessionHydrated || !customerId) return null
 
-  const privacyEmail = restaurantSettings.contact_email?.trim() || 'privacy@maazym.com'
+  const privacyEmail = PRIVACY_DELETION_EMAIL
 
   return (
     <div className="profile-page">

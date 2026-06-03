@@ -1,5 +1,8 @@
 export type LegalLanguage = 'en' | 'ar'
 
+/** Official contact for privacy and data-deletion requests (Play / legal). */
+export const PRIVACY_DELETION_EMAIL = 'maazymdoha@gmail.com'
+
 export function privacyPolicySections(lang: LegalLanguage) {
   const en = lang === 'en'
   return {
@@ -46,13 +49,12 @@ export function privacyPolicySections(lang: LegalLanguage) {
   }
 }
 
-export function dataProtectionSections(lang: LegalLanguage, contactEmail: string) {
+export function dataProtectionSections(lang: LegalLanguage) {
   const en = lang === 'en'
-  const safeEmail = contactEmail.trim() || 'privacy@maazym.com'
   return {
     title: en ? 'Data Protection' : 'حماية البيانات',
     updated: en ? 'Last updated: June 2026' : 'آخر تحديث: يونيو 2026',
-    contactEmail: safeEmail,
+    contactEmail: PRIVACY_DELETION_EMAIL,
     sections: [
       {
         heading: en ? 'Your data rights' : 'حقوقك في البيانات',
