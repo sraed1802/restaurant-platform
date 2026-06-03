@@ -59,5 +59,9 @@ auth_token = "env(SUPABASE_AUTH_SMS_TWILIO_AUTH_TOKEN)"
 [edge_runtime]
 policy = "oneshot"
 
+# Auth hooks call this function with Standard Webhooks headers, not a user JWT.
+[functions.auth-hook]
+verify_jwt = false
+
 [analytics]
 enabled = false

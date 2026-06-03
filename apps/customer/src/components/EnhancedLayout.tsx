@@ -388,6 +388,19 @@ export default function EnhancedLayout() {
               </li>
             </ul>
           </div>
+
+          <div className="footer-section">
+            <h4>{language === 'ar' ? 'الخصوصية' : 'Privacy'}</h4>
+            <ul>
+              <li><Link to="/privacy">{language === 'ar' ? 'سياسة الخصوصية' : 'Privacy Policy'}</Link></li>
+              <li><Link to="/data-protection">{language === 'ar' ? 'حماية البيانات' : 'Data Protection'}</Link></li>
+              <li>
+                <Link to="/data-protection">
+                  {language === 'ar' ? 'حذف بياناتي' : 'Delete my data'}
+                </Link>
+              </li>
+            </ul>
+          </div>
           
           <div className="footer-section">
             <h4>{language === 'ar' ? 'التواصل' : 'Contact'}</h4>

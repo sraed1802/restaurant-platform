@@ -7,6 +7,7 @@ import { useCustomerPromotionContext } from '../hooks/useCustomerPromotionContex
 import { useOrderAvailability } from '../hooks/useOrderAvailability'
 import { supabase } from '../lib/supabase'
 import { CartIcon, CheckIcon, ClockIcon, MenuIcon, SparklesIcon, UtensilsIcon } from '../components/Icons'
+import { StorageImage } from '../components/StorageImage'
 import type { Promotion } from '../../types'
 import {
   fetchCustomerPromotionContext,
@@ -234,7 +235,13 @@ export default function CartPage() {
                 <article key={cartLineId} className="cart-item">
                   <div className="cart-item-media" aria-hidden="true">
                     {item.product.image_url ? (
-                      <img src={item.product.image_url} alt="" loading="lazy" />
+                      <StorageImage
+                        src={item.product.image_url}
+                        preset="thumb"
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                      />
                     ) : (
                       <div className="cart-item-placeholder">
                         <UtensilsIcon />
@@ -443,8 +450,9 @@ const cartPageStyles = `
     gap: 1rem;
     box-shadow: var(--elev-1);
   }
-  .cart-item-media { aspect-ratio: 1 / 1; border-radius: calc(var(--radius-sm) + 4px); overflow: hidden; background: var(--cream-2); border: 1px solid rgba(184,151,90,0.14); }
-  .cart-item-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .cart-item-media { position: relative; aspect-ratio: 1 / 1; border-radius: calc(var(--radius-sm) + 4px); overflow: hidden; background: var(--cream-2); border: 1px solid rgba(184,151,90,0.14); }
+  .cart-item-media img,
+  .cart-item-media .storage-image { width: 100%; height: 100%; object-fit: cover; display: block; }
   .cart-item-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: var(--gold-dark); background: linear-gradient(135deg, var(--cream-2), var(--cream-3)); }
   .cart-item-placeholder svg { width: 28px; height: 28px; }
   .cart-item-content { min-width: 0; }

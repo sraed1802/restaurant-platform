@@ -119,5 +119,7 @@ export function useRestaurantSettings() {
   return {
     settings: query.data ?? DEFAULT_SETTINGS,
     loading: query.isPending,
+    loadedFromServer: query.isSuccess && query.data != null,
+    settingsError: query.error,
   }
 }

@@ -7,6 +7,7 @@ import { MailIcon } from '../components/Icons'
 import {
   buildAuthCallbackRedirectUrl,
   isAuthUserAlreadyExistsError,
+  isAuthConfirmationEmailError,
   makeSignupOnlyPassword,
 } from '../lib/authLoginFlow'
 import { isValidEmailOtpDigitCount, normalizeEmailOtpInput } from '../lib/emailOtpFormat'
@@ -296,6 +297,14 @@ export default function LoginPage() {
           )
           return
         }
+        if (isAuthConfirmationEmailError(signErr)) {
+          throw new Error(
+            t(
+              'We could not send the confirmation email. The site owner must configure Supabase Authentication → SMTP (for example Resend) with a verified sender for maazym.com.',
+              'تعذّر إرسال رسالة التأكيد. يجب على مسؤول الموقع ضبط Supabase → Authentication → SMTP (مثل Resend) مع بريد مرسل موثّق لـ maazym.com.'
+            )
+          )
+        }
         throw signErr
       }
 
@@ -320,8 +329,13 @@ export default function LoginPage() {
       setSentToEmail(trimmed)
       setLoginStep('wait_address_confirm')
     } catch (err) {
-      const msg =
-        err instanceof Error ? err.message : t('Could not send verification email', 'تعذّر إرسال رسالة التحقق')
+      const msg = isAuthConfirmationEmailError(err)
+        ? err instanceof Error
+          ? err.message
+          : t('Could not send verification email', 'تعذّر إرسال رسالة التحقق')
+        : err instanceof Error
+          ? err.message
+          : t('Could not send verification email', 'تعذّر إرسال رسالة التحقق')
       setError(msg)
     } finally {
       setLoading(false)

@@ -1,6 +1,7 @@
 // apps/customer/src/pages/OffersPage.tsx
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
+import { StorageImage } from '../components/StorageImage'
 import { useSessionStore } from '../store/sessionStore'
 import {
   fetchCustomerPromotionContext,
@@ -110,7 +111,13 @@ export default function OffersPage() {
               </div>
               {promo.image_url && (
                 <div className="offer-image">
-                  <img src={promo.image_url} alt={t(promo.title_en, promo.title_ar)} />
+                  <StorageImage
+                    src={promo.image_url}
+                    preset="offer"
+                    alt={t(promo.title_en, promo.title_ar)}
+                    loading="lazy"
+                    decoding="async"
+                  />
                 </div>
               )}
               <div className="offer-content">
@@ -232,10 +239,12 @@ export default function OffersPage() {
           left: 1rem;
         }
         .offer-image {
+          position: relative;
           aspect-ratio: 16/9;
           overflow: hidden;
         }
-        .offer-image img {
+        .offer-image img,
+        .offer-image .storage-image {
           width: 100%;
           height: 100%;
           object-fit: cover;

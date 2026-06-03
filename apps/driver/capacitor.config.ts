@@ -1,7 +1,7 @@
 import type { CapacitorConfig } from '@capacitor/cli'
 
 const config: CapacitorConfig = {
-  appId: 'com.hostera.driver',
+  appId: 'com.maazym.driver',
   appName: 'Maazym Driver',
   webDir: 'dist',
 }

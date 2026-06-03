@@ -30,3 +30,13 @@ export function isAuthUserAlreadyExistsError(err: unknown): boolean {
     msg.includes('database error saving new user')
   )
 }
+
+export function isAuthConfirmationEmailError(err: unknown): boolean {
+  const msg = err instanceof Error ? err.message.toLowerCase() : String(err).toLowerCase()
+  return (
+    msg.includes('error sending confirmation email') ||
+    msg.includes('error sending magic link email') ||
+    msg.includes('error sending email') ||
+    msg.includes('email rate limit exceeded')
+  )
+}

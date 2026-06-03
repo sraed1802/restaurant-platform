@@ -13,6 +13,7 @@ dist/
 .env.*.local
 **/.env
 !**/.env.example
+!**/.env.production.example
 !NETLIFY_*.env.example
 !SUPABASE_PRODUCTION_SECRETS.env.example
 
@@ -38,7 +39,12 @@ npm-debug.log*
 supabase/.branches/
 supabase/.temp/
 
-# Android / Capacitor build artifacts
+# iOS / Xcode build artifacts (commit ios/App source; ignore local builds)
+**/ios/App/Pods/
+**/ios/App/build/
+**/ios/DerivedData/
+**/ios/.xcode.env.local
+
 **/android/.gradle/
 **/android/build/
 **/android/app/build/

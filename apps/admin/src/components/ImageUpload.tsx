@@ -7,8 +7,9 @@ interface ImageUploadProps {
   onChange: (url: string) => void
   label?: string
   bucket?: string
-  /** Max upload size after any compression (bytes). Supabase project limits vary — see Dashboard → Storage. */
   maxFileSizeBytes?: number
+  /** Cap longest edge before upload (menu photos default 1280). */
+  compressMaxDimension?: number
 }
 
 function formatMb(bytes: number): string {
@@ -55,7 +56,11 @@ async function compressRasterImage(file: File, maxDimension: number, quality: nu
 }
 
 /** Shrink large raster images so uploads stay under typical Storage limits. */
-async function prepareImageForUpload(file: File, maxBytes: number): Promise<File> {
+async function prepareImageForUpload(
+  file: File,
+  maxBytes: number,
+  compressMaxDimension?: number,
+): Promise<File> {
   if (!file.type.startsWith('image/')) {
     if (file.size > maxBytes) {
       throw new Error(
@@ -70,6 +75,9 @@ async function prepareImageForUpload(file: File, maxBytes: number): Promise<File
   if (working.size <= maxBytes) return working
 
   const attempts: { maxDim: number; q: number }[] = [
+    ...(compressMaxDimension
+      ? [{ maxDim: compressMaxDimension, q: 0.82 }]
+      : []),
     { maxDim: 2048, q: 0.9 },
     { maxDim: 1920, q: 0.85 },
     { maxDim: 1600, q: 0.8 },
@@ -104,6 +112,7 @@ export default function ImageUpload({
   label = 'Image',
   bucket = 'menu',
   maxFileSizeBytes = 2 * 1024 * 1024,
+  compressMaxDimension,
 }: ImageUploadProps) {
   const [uploading, setUploading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -117,7 +126,7 @@ export default function ImageUpload({
     try {
       let toUpload = file
       try {
-        toUpload = await prepareImageForUpload(file, maxFileSizeBytes)
+        toUpload = await prepareImageForUpload(file, maxFileSizeBytes, compressMaxDimension)
       } catch (prepErr) {
         alert(errorMessage(prepErr))
         return

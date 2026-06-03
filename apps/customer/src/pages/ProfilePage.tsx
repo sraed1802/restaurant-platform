@@ -4,8 +4,12 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useSessionStore } from '../store/sessionStore'
 import type { OutsideDeliveryAddress } from '@rms/supabase/types'
 import { isHotelRoomDeliveryAddress } from '@rms/supabase/fulfillment'
+import { supabase } from '../lib/supabase'
 import { fetchCustomerProfileRow, updateCustomerProfile } from '../services/customerProfile'
+import { deleteCustomerAccount } from '../services/deleteCustomerAccount'
 import { useSessionStoreHydrated } from '../hooks/useSessionStoreHydrated'
+import { useRestaurantSettings } from '../hooks/useRestaurantSettings'
+import { useCartStore } from '../store/cartStore'
 
 function newBlankAddress(): OutsideDeliveryAddress {
   return {
@@ -34,6 +38,10 @@ export default function ProfilePage() {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [notice, setNotice] = useState<string | null>(null)
+  const [deleteConfirm, setDeleteConfirm] = useState(false)
+  const [deleteBusy, setDeleteBusy] = useState(false)
+  const [deleteError, setDeleteError] = useState<string | null>(null)
+  const { settings: restaurantSettings } = useRestaurantSettings()
 
   useEffect(() => {
     if (!sessionHydrated) return
@@ -105,7 +113,26 @@ export default function ProfilePage() {
     setSaving(false)
   }
 
+  async function onDeleteAccount() {
+    if (!deleteConfirm || !customerId) return
+    setDeleteBusy(true)
+    setDeleteError(null)
+    const { error: delErr } = await deleteCustomerAccount()
+    if (delErr) {
+      setDeleteError(delErr)
+      setDeleteBusy(false)
+      return
+    }
+    useCartStore.getState().clearCart()
+    await supabase.auth.signOut()
+    useSessionStore.getState().clearAuth()
+    setDeleteBusy(false)
+    navigate('/menu', { replace: true })
+  }
+
   if (!sessionHydrated || !customerId) return null
+
+  const privacyEmail = restaurantSettings.contact_email?.trim() || 'privacy@maazym.com'
 
   return (
     <div className="profile-page">
@@ -215,12 +242,50 @@ export default function ProfilePage() {
           </form>
         )}
 
-        <Link to="/menu" className="profile-back">
-          {t('Back to menu', 'العودة إلى القائمة')}
-        </Link>
-        <Link to="/referral" className="profile-back" style={{ display: 'block', marginTop: '0.5rem' }}>
-          {t('Referral program', 'برنامج الإحالة')}
-        </Link>
+        <section className="profile-danger" aria-labelledby="profile-delete-heading">
+          <h2 id="profile-delete-heading" className="profile-section-title">
+            {t('Delete account & data', 'حذف الحساب والبيانات')}
+          </h2>
+          <p className="profile-muted small">
+            {t(
+              'Permanently removes your profile, sign-in, name, email, mobile number, and saved addresses. Order history may be kept in redacted form where required by law.',
+              'يزيل نهائياً ملفك وتسجيل الدخول والاسم والبريد والجوال والعناوين المحفوظة. قد يُحفظ سجل الطلبات بشكل مُخفّى حيث يقتضي القانون ذلك.',
+            )}
+          </p>
+          <label className="profile-inline profile-delete-confirm">
+            <input
+              type="checkbox"
+              checked={deleteConfirm}
+              onChange={(e) => setDeleteConfirm(e.target.checked)}
+            />
+            {t('I understand this cannot be undone', 'أفهم أن هذا الإجراء لا يمكن التراجع عنه')}
+          </label>
+          {deleteError ? <p className="profile-error">{deleteError}</p> : null}
+          <button
+            type="button"
+            className="profile-delete-btn"
+            disabled={!deleteConfirm || deleteBusy}
+            onClick={() => void onDeleteAccount()}
+          >
+            {deleteBusy ? t('Deleting…', 'جارٍ الحذف…') : t('Delete my account', 'حذف حسابي')}
+          </button>
+          <p className="profile-muted small">
+            {t('Prefer email?', 'تفضّل البريد؟')}{' '}
+            <a
+              href={`mailto:${encodeURIComponent(privacyEmail)}?subject=${encodeURIComponent(t('Request deletion of my personal data', 'طلب حذف بياناتي الشخصية'))}`}
+              className="profile-inline-link"
+            >
+              {privacyEmail}
+            </a>
+          </p>
+        </section>
+
+        <nav className="profile-links" aria-label={t('Profile links', 'روابط الملف')}>
+          <Link to="/privacy">{t('Privacy Policy', 'سياسة الخصوصية')}</Link>
+          <Link to="/data-protection">{t('Data Protection', 'حماية البيانات')}</Link>
+          <Link to="/menu">{t('Back to menu', 'العودة إلى القائمة')}</Link>
+          <Link to="/referral">{t('Referral program', 'برنامج الإحالة')}</Link>
+        </nav>
       </div>
 
       <style>{`
@@ -246,7 +311,13 @@ export default function ProfilePage() {
         .profile-error { color: var(--danger); font-size: 0.88rem; margin: 0; }
         .profile-save { margin-top: 0.5rem; padding: 0.75rem; border: none; border-radius: var(--radius-md); background: var(--ink); color: var(--cream); font-weight: 600; cursor: pointer; }
         .profile-save:disabled { opacity: 0.55; cursor: not-allowed; }
-        .profile-back { display: inline-block; margin-top: 1.25rem; font-size: 0.88rem; color: var(--ink-muted); }
+        .profile-danger { margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid rgba(185, 28, 28, 0.25); }
+        .profile-delete-confirm { margin: 0.75rem 0; }
+        .profile-delete-btn { width: 100%; padding: 0.75rem; border: 1px solid rgba(185, 28, 28, 0.55); border-radius: var(--radius-md); background: rgba(185, 28, 28, 0.08); color: #b91c1c; font-weight: 700; cursor: pointer; }
+        .profile-delete-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .profile-inline-link { color: var(--gold-dark, #8a6d3b); font-weight: 600; }
+        .profile-links { display: flex; flex-direction: column; gap: 0.45rem; margin-top: 1.25rem; font-size: 0.88rem; }
+        .profile-links a { color: var(--ink-muted); text-decoration: underline; }
       `}</style>
     </div>
   )

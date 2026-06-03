@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Maazym — Order QR</title>
+    <style>
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        font-family: system-ui, sans-serif;
+        background: #faf8f4;
+        color: #0e0e0e;
+        padding: 2rem;
+      }
+      .card {
+        max-width: 420px;
+        text-align: center;
+        background: #fff;
+        border-radius: 16px;
+        padding: 2rem 1.5rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+      }
+      img {
+        width: min(320px, 80vw);
+        height: auto;
+        display: block;
+        margin: 0 auto 1rem;
+      }
+      h1 {
+        font-size: 1.35rem;
+        margin: 0 0 0.5rem;
+      }
+      p {
+        margin: 0.25rem 0;
+        color: #555;
+        line-height: 1.5;
+      }
+      a {
+        color: #8a6b2e;
+        word-break: break-all;
+      }
+      @media print {
+        body { background: #fff; padding: 0; }
+        .card { box-shadow: none; border: 1px solid #ddd; }
+        .no-print { display: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <img src="./maazym-www.png" width="1024" height="1024" alt="QR code for https://www.maazym.com/" />
+      <h1>Scan to order</h1>
+      <p><strong>Maazym Coffee &amp; Restaurant</strong></p>
+      <p><a href="https://www.maazym.com/">https://www.maazym.com/</a></p>
+      <p class="no-print">Print this page for table tents, menus, or storefront signage.</p>
+    </div>
+  </body>
+</html>

@@ -35,6 +35,8 @@ const OrdersPage = lazy(() => import('./pages/OrdersPage'))
 const ReferralPage = lazy(() => import('./pages/ReferralPage'))
 const ReviewsPage = lazy(() => import('./pages/ReviewsPage'))
 const ProfilePage = lazy(() => import('./pages/ProfilePage'))
+const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage'))
+const DataProtectionPage = lazy(() => import('./pages/DataProtectionPage'))
 const OffersPage = lazy(() => import('./pages/OffersPage'))
 
 function NativeRouteBody({ children }: { children: ReactNode }) {
@@ -173,6 +175,8 @@ export default function App() {
             <Route path="/referral" element={lazyRoute(wrapNative(<ReferralPage />))} />
             <Route path="/reviews" element={lazyRoute(wrapNative(<ReviewsPage />))} />
             <Route path="/profile" element={lazyRoute(wrapNative(<ProfilePage />))} />
+            <Route path="/privacy" element={lazyRoute(wrapNative(<PrivacyPolicyPage />))} />
+            <Route path="/data-protection" element={lazyRoute(wrapNative(<DataProtectionPage />))} />
           </Route>
         </Routes>
         {!nativeShell && !isAdminEmbedPreview() ? <ThemeToggle /> : null}

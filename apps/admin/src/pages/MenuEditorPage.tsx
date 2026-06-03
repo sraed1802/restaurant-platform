@@ -1,5 +1,5 @@
 // apps/admin/src/pages/MenuEditorPage.tsx
-import { useState, useEffect, useRef, type ChangeEvent } from 'react'
+import { useState, useEffect, useRef, type ChangeEvent, type DragEvent } from 'react'
 import { supabase } from '../lib/supabase'
 import ImageUpload from '../components/ImageUpload'
 import { asMutationArg, asMutationRowsArg } from '../lib/supabaseTypeWorkarounds'
@@ -11,6 +11,7 @@ import {
   importModifierGroupsCsv,
   type MenuCsvImportSummary,
 } from '../services/menuCsv'
+import { persistCategoryDisplayOrder, reorderCategoriesById } from '../services/menuCategories'
 
 type StaffRole = 'admin' | 'manager' | 'supervisor' | null
 
@@ -78,6 +79,15 @@ export default function MenuEditorPage({ staffRole }: MenuEditorPageProps) {
   const [uploadingTarget, setUploadingTarget] = useState<'categories' | 'modifier_groups' | null>(null)
   const categoryUploadRef = useRef<HTMLInputElement | null>(null)
   const modifierGroupUploadRef = useRef<HTMLInputElement | null>(null)
+  const [draggingCategoryId, setDraggingCategoryId] = useState<string | null>(null)
+  const [categoryOrderSaving, setCategoryOrderSaving] = useState(false)
+  const categoriesBeforeDragRef = useRef<Category[]>([])
+  const categoriesRef = useRef(categories)
+  const categoryDragCommitRef = useRef(false)
+
+  useEffect(() => {
+    categoriesRef.current = categories
+  }, [categories])
 
   useEffect(() => { loadMenu() }, [])
 
@@ -152,6 +162,57 @@ export default function MenuEditorPage({ staffRole }: MenuEditorPageProps) {
   async function toggleCategoryActive(cat: Category) {
     await supabase.from('categories').update(asMutationArg({ is_active: !cat.is_active })).eq('id', cat.id)
     setCategories((prev) => prev.map((c) => c.id === cat.id ? { ...c, is_active: !c.is_active } : c))
+  }
+
+  function handleCategoryDragStart(event: DragEvent, categoryId: string) {
+    categoryDragCommitRef.current = false
+    categoriesBeforeDragRef.current = categoriesRef.current
+    event.dataTransfer.effectAllowed = 'move'
+    event.dataTransfer.setData('text/plain', categoryId)
+    setDraggingCategoryId(categoryId)
+  }
+
+  function handleCategoryDragOver(event: DragEvent, hoverId: string) {
+    event.preventDefault()
+    if (!draggingCategoryId || draggingCategoryId === hoverId) return
+    setCategories((prev) => reorderCategoriesById(prev, draggingCategoryId, hoverId))
+  }
+
+  async function handleCategoryDragEnd() {
+    if (categoryDragCommitRef.current) return
+    categoryDragCommitRef.current = true
+
+    const dragId = draggingCategoryId
+    setDraggingCategoryId(null)
+    if (!dragId) return
+
+    const before = categoriesBeforeDragRef.current
+    const after = categoriesRef.current
+    const orderChanged =
+      before.length !== after.length ||
+      before.some((cat, index) => cat.id !== after[index]?.id)
+
+    if (!orderChanged) return
+
+    setCategoryOrderSaving(true)
+    try {
+      await persistCategoryDisplayOrder(after.map((cat) => cat.id))
+      setCategories((prev) => prev.map((cat, index) => ({ ...cat, display_order: index })))
+      setImportFeedback({
+        tone: 'success',
+        text: 'Category order saved. The guest menu will show categories in this sequence.',
+      })
+    } catch (error) {
+      console.error('Failed to save category order:', error)
+      setCategories(before)
+      setImportFeedback({
+        tone: 'error',
+        text: 'Could not save category order. Changes were reverted.',
+      })
+    } finally {
+      setCategoryOrderSaving(false)
+      categoriesBeforeDragRef.current = []
+    }
   }
 
   function handleCategoryTemplateDownload() {
@@ -347,6 +408,11 @@ export default function MenuEditorPage({ staffRole }: MenuEditorPageProps) {
         <aside className="cat-sidebar">
           <div className="cat-sidebar-header">
             <span className="sidebar-section-label">Categories</span>
+            <p className="cat-sidebar-hint">
+              {categoryOrderSaving
+                ? 'Saving order…'
+                : 'Drag to set guest menu order (top → bottom)'}
+            </p>
           </div>
           {loading ? (
             <div className="cat-skeleton-list">
@@ -357,17 +423,39 @@ export default function MenuEditorPage({ staffRole }: MenuEditorPageProps) {
           ) : (
             <div className="cat-list">
               {categories.map((cat) => (
-                <button
+                <div
                   key={cat.id}
-                  className={`cat-item ${selectedCat === cat.id ? 'active' : ''} ${!cat.is_active ? 'inactive' : ''}`}
-                  onClick={() => setSelectedCat(cat.id)}
+                  className={`cat-item ${selectedCat === cat.id ? 'active' : ''} ${!cat.is_active ? 'inactive' : ''} ${draggingCategoryId === cat.id ? 'dragging' : ''}`}
+                  onDragOver={(event) => handleCategoryDragOver(event, cat.id)}
+                  onDrop={(event) => {
+                    event.preventDefault()
+                    void handleCategoryDragEnd()
+                  }}
                 >
-                  <span className="cat-item-name">{cat.name_en}</span>
-                  <span className="cat-item-count">
-                    {products.filter((p) => p.category_id === cat.id).length}
+                  <span
+                    className="cat-drag-handle"
+                    draggable={!categoryOrderSaving}
+                    title="Drag to reorder"
+                    aria-label={`Reorder ${cat.name_en}`}
+                    onDragStart={(event) => handleCategoryDragStart(event, cat.id)}
+                    onDragEnd={() => {
+                      void handleCategoryDragEnd()
+                    }}
+                  >
+                    ⋮⋮
                   </span>
-                  {!cat.is_active && <span className="cat-inactive-badge">Hidden</span>}
-                </button>
+                  <button
+                    type="button"
+                    className="cat-item-select"
+                    onClick={() => setSelectedCat(cat.id)}
+                  >
+                    <span className="cat-item-name">{cat.name_en}</span>
+                    <span className="cat-item-count">
+                      {products.filter((p) => p.category_id === cat.id).length}
+                    </span>
+                    {!cat.is_active && <span className="cat-inactive-badge">Hidden</span>}
+                  </button>
+                </div>
               ))}
             </div>
           )}
@@ -519,6 +607,7 @@ export default function MenuEditorPage({ staffRole }: MenuEditorPageProps) {
                 value={productForm.image_url}
                 onChange={(url) => setProductForm((f) => ({ ...f, image_url: url }))}
                 label="Product Image"
+                compressMaxDimension={1280}
               />
               <div className="toggle-row">
                 <label className="toggle-label">
@@ -614,13 +703,38 @@ export default function MenuEditorPage({ staffRole }: MenuEditorPageProps) {
 
         .cat-sidebar { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; position: sticky; top: 1rem; }
         .cat-sidebar-header { padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); }
+        .cat-sidebar-hint { margin-top: 0.35rem; font-size: 0.65rem; line-height: 1.4; color: var(--text-muted); }
         .sidebar-section-label { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); }
         .cat-list { display: flex; flex-direction: column; }
-        .cat-item { display: flex; align-items: center; gap: 0.5rem; padding: 0.65rem 1rem; border-bottom: 1px solid var(--border); text-align: left; transition: background var(--transition); }
+        .cat-item { display: flex; align-items: stretch; gap: 0; border-bottom: 1px solid var(--border); transition: background var(--transition), opacity var(--transition); }
         .cat-item:last-child { border-bottom: none; }
         .cat-item:hover { background: var(--bg-3); }
         .cat-item.active { background: var(--bg-3); border-left: 2px solid var(--gold); }
         .cat-item.inactive { opacity: 0.5; }
+        .cat-item.dragging { opacity: 0.65; }
+        .cat-drag-handle {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 1.75rem;
+          flex-shrink: 0;
+          cursor: grab;
+          color: var(--text-muted);
+          font-size: 0.7rem;
+          letter-spacing: -0.12em;
+          user-select: none;
+          touch-action: none;
+        }
+        .cat-drag-handle:active { cursor: grabbing; }
+        .cat-item-select {
+          flex: 1;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.65rem 1rem 0.65rem 0.25rem;
+          text-align: left;
+          min-width: 0;
+        }
         .cat-item-name { flex: 1; font-size: 0.8rem; font-weight: 500; color: var(--text); }
         .cat-item-count { font-size: 0.62rem; font-family: var(--font-mono); color: var(--text-muted); background: var(--bg-2); padding: 0.1rem 0.3rem; border-radius: 3px; }
         .cat-inactive-badge { font-size: 0.6rem; color: var(--amber); background: var(--amber-dim); padding: 0.1rem 0.3rem; border-radius: 3px; }
@@ -698,10 +812,13 @@ export default function MenuEditorPage({ staffRole }: MenuEditorPageProps) {
             gap: 0.5rem;
           }
           .cat-item {
-            min-width: 170px;
+            min-width: 190px;
             border: 1px solid var(--border);
             border-radius: 10px;
             flex-shrink: 0;
+          }
+          .cat-item-select {
+            padding: 0.65rem 0.75rem 0.65rem 0.15rem;
           }
           .cat-item:last-child {
             border-bottom: 1px solid var(--border);

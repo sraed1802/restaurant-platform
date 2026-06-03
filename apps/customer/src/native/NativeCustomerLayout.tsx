@@ -26,7 +26,9 @@ export default function NativeCustomerLayout() {
     pathname.startsWith('/verify') ||
     pathname.startsWith('/referral') ||
     pathname.startsWith('/reviews') ||
-    pathname.startsWith('/profile')
+    pathname.startsWith('/profile') ||
+    pathname.startsWith('/privacy') ||
+    pathname.startsWith('/data-protection')
 
   const screenTitle = !isWelcome
     ? pathname.startsWith('/checkout')
@@ -39,11 +41,15 @@ export default function NativeCustomerLayout() {
             ? t('Cart', 'السلة')
             : ordersActive
               ? t('Orders', 'الطلبات')
-              : accountActive
-                ? customerId
-                  ? t('More', 'المزيد')
-                  : t('Sign in', 'دخول')
-                : null
+              : pathname.startsWith('/privacy')
+                ? t('Privacy', 'الخصوصية')
+                : pathname.startsWith('/data-protection')
+                  ? t('Data Protection', 'حماية البيانات')
+                  : accountActive
+                    ? customerId
+                      ? t('More', 'المزيد')
+                      : t('Sign in', 'دخول')
+                    : null
     : null
 
   const accountTo = customerId ? '/profile' : '/login'

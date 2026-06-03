@@ -1,6 +1,7 @@
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import ReviewSystem from '../ReviewSystem'
+import { StorageImage } from '../StorageImage'
 import { CloseIcon } from '../Icons'
 import { useSessionStore } from '../../store/sessionStore'
 import { fetchReviewEligibilityForProduct } from '../../services/reviewEligibility'
@@ -224,7 +225,13 @@ export function ProductDetailSheet({
 
             {product.image_url && (
               <div className="pds-image">
-                <img src={product.image_url} alt={t(product.name_en, product.name_ar)} loading="lazy" />
+                <StorageImage
+                  src={product.image_url}
+                  preset="product-detail"
+                  alt={t(product.name_en, product.name_ar)}
+                  loading="lazy"
+                  decoding="async"
+                />
               </div>
             )}
 
@@ -435,10 +442,12 @@ export function ProductDetailSheet({
                 left: 1rem;
               }
               .pds-image {
+                position: relative;
                 aspect-ratio: 16/9;
                 overflow: hidden;
               }
-              .pds-image img {
+              .pds-image img,
+              .pds-image .storage-image {
                 width: 100%;
                 height: 100%;
                 object-fit: cover;

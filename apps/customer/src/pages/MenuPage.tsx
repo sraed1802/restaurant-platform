@@ -73,6 +73,8 @@ export default function MenuPage() {
     selectedCategory,
     setSelectedCategory,
     loading,
+    loadError,
+    reloadMenu,
   } = useMenuCatalog()
 
   const [selectedProduct, setSelectedProduct] = useState<ProductWithModifiers | null>(null)
@@ -91,7 +93,10 @@ export default function MenuPage() {
   const navigate = useNavigate()
   const [filtersExpanded, setFiltersExpanded] = useState(false)
   const [nativeFilterOpen, setNativeFilterOpen] = useState(false)
-  const { settings: restaurantSettings } = useRestaurantSettings()
+  const {
+    settings: restaurantSettings,
+    loadedFromServer: settingsLoadedFromServer,
+  } = useRestaurantSettings()
   const [canScrollCategoriesLeft, setCanScrollCategoriesLeft] = useState(false)
   const [canScrollCategoriesRight, setCanScrollCategoriesRight] = useState(false)
   const advancedSearchEnabled = useFeatureFlag('advancedSearch')
@@ -374,6 +379,9 @@ export default function MenuPage() {
     document.querySelector('.enhanced-main')?.scrollTo(0, 0)
   }, [])
 
+  const menuDataMissing = !loading && categories.length === 0
+  const showConnectionHelp = menuDataMissing || loadError != null || !settingsLoadedFromServer
+
   if (loading) {
     if (isNativeCustomerApp()) {
       return <NativeCustomerLoading variant="menu" />
@@ -430,6 +438,42 @@ export default function MenuPage() {
           {closedMessage}
         </div>
       )}
+
+      {showConnectionHelp ? (
+        <div
+          role="alert"
+          style={{
+            margin: '0 auto 1rem',
+            maxWidth: 'var(--container-wide)',
+            padding: '1rem 1.1rem',
+            borderRadius: 'var(--radius-md)',
+            border: '1px solid rgba(200, 80, 60, 0.45)',
+            background: 'rgba(200, 80, 60, 0.1)',
+            color: 'var(--ink)',
+          }}
+        >
+          <p style={{ margin: '0 0 0.5rem', fontWeight: 700 }}>
+            {t('Menu could not load', 'تعذّر تحميل القائمة')}
+          </p>
+          <p style={{ margin: '0 0 0.75rem', fontSize: '0.9rem', lineHeight: 1.5 }}>
+            {t(
+              'Install the latest update from Play Store (v1.0.3+), check Wi‑Fi or mobile data, then retry.',
+              'ثبّت آخر تحديث من متجر Play (الإصدار 1.0.3+)، وتأكد من الإنترنت، ثم أعد المحاولة.',
+            )}
+          </p>
+          {loadError ? (
+            <p style={{ margin: '0 0 0.75rem', fontSize: '0.8rem', opacity: 0.85 }}>{loadError}</p>
+          ) : null}
+          <button
+            type="button"
+            className="native-welcome-btn native-welcome-btn-secondary"
+            style={{ maxWidth: '12rem' }}
+            onClick={() => void reloadMenu()}
+          >
+            {t('Retry', 'إعادة المحاولة')}
+          </button>
+        </div>
+      ) : null}
 
       {!nativeUi ? (
         <ServiceModeStrip

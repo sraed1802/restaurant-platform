@@ -1,4 +1,4 @@
-package com.hostera.driver;
+package com.maazym.admin;
 
 import com.getcapacitor.BridgeActivity;
 

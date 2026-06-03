@@ -49,6 +49,7 @@ export function useMenuCatalog() {
   const [activePromotions, setActivePromotions] = useState<PromotionRow[]>([])
   const [selectedCategory, setSelectedCategory] = useState('')
   const [loading, setLoading] = useState(true)
+  const [loadError, setLoadError] = useState<string | null>(null)
   const selectedCategoryRef = useRef('')
   const phone = useSessionStore((state) => state.phone)
   const customerId = useSessionStore((state) => state.customerId)
@@ -91,21 +92,28 @@ export function useMenuCatalog() {
   }, [customerId, phone])
 
   const loadMenu = useCallback(async () => {
+    setLoadError(null)
+    setLoading(true)
     try {
-      const { data: cats } = await supabase
+      const { data: cats, error: categoriesError } = await supabase
         .from('categories')
         .select('*')
         .eq('is_active', true)
         .order('display_order')
 
-      const categoryRows = (cats ?? []) as Category[]
-
-      if (!categoryRows.length) {
-        setLoading(false)
+      if (categoriesError) {
+        console.error('Failed to load menu categories:', categoriesError)
+        setLoadError(categoriesError.message)
         return
       }
 
-      const { data: prods } = await supabase
+      const categoryRows = (cats ?? []) as Category[]
+
+      if (!categoryRows.length) {
+        return
+      }
+
+      const { data: prods, error: productsError } = await supabase
         .from('products')
         .select(`
           *,
@@ -118,8 +126,13 @@ export function useMenuCatalog() {
           )
         `)
         .eq('is_available', true)
-        .eq('is_featured', true)
         .order('display_order')
+
+      if (productsError) {
+        console.error('Failed to load menu products:', productsError)
+        setLoadError(productsError.message)
+        return
+      }
 
       const productRows = (prods ?? []) as ProductCatalogRow[]
       const grouped: Record<string, ProductWithModifiers[]> = {}
@@ -161,6 +174,9 @@ export function useMenuCatalog() {
       setCategories(visibleCategories)
       setSelectedCategory(visibleCategories[0]?.id ?? '')
       setProducts(visibleProducts)
+      if (!visibleCategories.length) {
+        setLoadError('No menu items are available right now.')
+      }
     } finally {
       setLoading(false)
     }
@@ -327,6 +343,8 @@ export function useMenuCatalog() {
     selectedCategory,
     setSelectedCategory,
     loading,
+    loadError,
+    reloadMenu: loadMenu,
     loadFeaturedPromotions,
     applyAutomaticPromotions,
   }

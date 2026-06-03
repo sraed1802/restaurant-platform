@@ -20,7 +20,11 @@
     "android:sync:customer": "npm run build:customer && cd apps/customer && npx cap sync android",
     "android:sync:admin": "npm run build:admin && cd apps/admin && npx cap sync android",
     "android:sync:driver": "npm run build:driver && cd apps/driver && npx cap sync android",
-    "generate:restaurant-import": "node scripts/generate-restaurant-import-sql.mjs --input supabase/import_templates --output supabase/generated/restaurant_import.generated.sql"
+    "ios:sync:customer": "npm run build:customer && cd apps/customer && npx cap sync ios",
+    "ios:sync:admin": "npm run build:admin && cd apps/admin && npx cap sync ios",
+    "ios:sync:driver": "npm run build:driver && cd apps/driver && npx cap sync ios",
+    "generate:restaurant-import": "node scripts/generate-restaurant-import-sql.mjs --input supabase/import_templates --output supabase/generated/restaurant_import.generated.sql",
+    "generate:qr": "node scripts/generate-maazym-qr.mjs"
   },
   "dependencies": {
     "@capacitor/cli": "^8.3.3",

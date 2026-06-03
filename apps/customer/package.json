@@ -7,13 +7,17 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "test": "vitest"
+    "test": "vitest",
+    "cap:sync": "npx cap sync",
+    "cap:open:android": "npx cap open android",
+    "cap:open:ios": "npx cap open ios"
   },
   "dependencies": {
     "@capacitor/android": "^8.3.3",
     "@capacitor/app": "^8.1.0",
     "@capacitor/core": "^8.3.3",
     "@capacitor/haptics": "^8.0.2",
+    "@capacitor/ios": "^8.3.3",
     "@rms/platform": "file:../../packages/platform",
     "@rms/supabase": "file:../../packages/supabase",
     "@sentry/react": "^7.64.0",

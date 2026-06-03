@@ -2,9 +2,9 @@ import { Capacitor } from '@capacitor/core'
 import { openAndroidPackageId } from '../plugins/launchExternalApp'
 
 const ANDROID_ADMIN_PACKAGE =
-  (import.meta.env.VITE_ANDROID_ADMIN_PACKAGE as string | undefined) ?? 'com.hostera.admin'
+  (import.meta.env.VITE_ANDROID_ADMIN_PACKAGE as string | undefined) ?? 'com.maazym.admin'
 const ANDROID_DRIVER_PACKAGE =
-  (import.meta.env.VITE_ANDROID_DRIVER_PACKAGE as string | undefined) ?? 'com.hostera.driver'
+  (import.meta.env.VITE_ANDROID_DRIVER_PACKAGE as string | undefined) ?? 'com.maazym.driver'
 
 /**
  * WebView often blocks `intent://` navigation from JS click handlers; use the native plugin first.
@@ -64,7 +64,7 @@ export function dispatchCustomerAppUrlOpen(rawUrl: string): boolean {
   try {
     const url = new URL(rawUrl)
     const proto = url.protocol.replace(/:$/, '')
-    if (proto === 'com.maazym.customer' || proto === 'com.hostera.customer') {
+    if (proto === 'com.maazym.customer') {
       const h = url.hostname
       if (h === 'admin') target = 'admin'
       else if (h === 'driver') target = 'driver'

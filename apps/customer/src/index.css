@@ -252,3 +252,31 @@ html.rms-android-customer,
 html.rms-android-customer body {
   overscroll-behavior-y: none;
 }
+
+/* Optimized menu / product images (StorageImage) */
+.storage-image-wrap {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+.storage-image-wrap .storage-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.storage-image-wrap .storage-image--loaded {
+  opacity: 1;
+}
+.storage-image-skeleton {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, var(--cream-2) 8%, var(--cream-3) 18%, var(--cream-2) 33%);
+  background-size: 200% 100%;
+  animation: storage-image-shimmer 1.2s ease-in-out infinite;
+}
+@keyframes storage-image-shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}

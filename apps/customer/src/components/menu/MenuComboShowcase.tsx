@@ -1,4 +1,5 @@
 import { motion, useReducedMotion } from 'framer-motion'
+import { StorageImage } from '../StorageImage'
 import type { ComboPromotion } from '../../../types'
 import { canAutoBuildCombo } from '../../services/comboPromotions'
 
@@ -98,10 +99,12 @@ export function MenuComboShowcase({
               <div className="combo-card-glow" />
               <div className="combo-card-media">
                 {combo.image_url ? (
-                  <img
+                  <StorageImage
                     src={combo.image_url}
+                    preset="offer"
                     alt={language === 'ar' ? combo.name_ar : combo.name_en}
                     loading="lazy"
+                    decoding="async"
                   />
                 ) : (
                   <div className="combo-card-placeholder">
@@ -238,6 +241,7 @@ export function MenuComboShowcase({
           pointer-events: none;
         }
         .combo-card-media {
+          position: relative;
           aspect-ratio: 16 / 10;
           overflow: hidden;
           background: linear-gradient(
@@ -246,7 +250,8 @@ export function MenuComboShowcase({
             color-mix(in srgb, var(--surface-elevated) 88%, var(--combo-secondary) 12%)
           );
         }
-        .combo-card-media img {
+        .combo-card-media img,
+        .combo-card-media .storage-image {
           width: 100%;
           height: 100%;
           object-fit: cover;

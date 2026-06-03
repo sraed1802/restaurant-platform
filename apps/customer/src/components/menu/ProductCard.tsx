@@ -1,4 +1,5 @@
 import { ClockIcon, UtensilsIcon } from '../Icons'
+import { StorageImage } from '../StorageImage'
 import { DIETARY_FILTERS, dietaryBadgeLabel } from '../../lib/dietaryTags'
 import type { PromotionRow } from '../../lib/menuPromotions'
 import type { ProductWithModifiers } from './types'
@@ -54,7 +55,13 @@ export function ProductCard({
       <button type="button" className="product-card-main" onClick={onSelect}>
         <div className="product-image-wrap">
           {product.image_url ? (
-            <img src={product.image_url} alt={t(product.name_en, product.name_ar)} loading="lazy" />
+            <StorageImage
+              src={product.image_url}
+              preset="product-card"
+              alt={t(product.name_en, product.name_ar)}
+              loading="lazy"
+              decoding="async"
+            />
           ) : (
             <div className="product-image-placeholder" aria-hidden>
               <UtensilsIcon />
@@ -181,6 +188,7 @@ export function ProductCard({
           overflow: hidden;
           background: var(--cream-2);
         }
+        .product-image-wrap .storage-image,
         .product-image-wrap img {
           width: 100%;
           height: 100%;

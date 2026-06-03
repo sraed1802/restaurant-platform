@@ -8,11 +8,13 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "cap:sync": "npx cap sync",
-    "cap:open:android": "npx cap open android"
+    "cap:open:android": "npx cap open android",
+    "cap:open:ios": "npx cap open ios"
   },
   "dependencies": {
     "@capacitor/android": "^8.3.3",
     "@capacitor/core": "^8.3.3",
+    "@capacitor/ios": "^8.3.3",
     "@rms/platform": "file:../../packages/platform",
     "@rms/supabase": "file:../../packages/supabase",
     "@supabase/supabase-js": "^2.39.0",

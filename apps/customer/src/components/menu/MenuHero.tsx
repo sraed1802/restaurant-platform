@@ -1,7 +1,8 @@
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
 import { isAdminEmbedPreview } from '../../lib/embedPreview'
 import { isAndroidCustomerApp } from '../../lib/nativeCustomerShell'
+import { storageImageUrl } from '../../lib/storageImage'
 
 type Settings = {
   hero_title_en: string | null
@@ -51,18 +52,38 @@ export function MenuHero({ settings, language }: Props) {
   const orbBY = useTransform(scrollYProgress, [0, 1], reduceMotion ? [0, 0] : [0, 22])
   const sheenX = useTransform(scrollYProgress, [0, 1], reduceMotion ? ['-10%', '-10%'] : ['-6%', '16%'])
 
+  const heroImagePrimary = storageImageUrl(settings.hero_image_url, 'hero')
+  const heroImageRaw = settings.hero_image_url?.trim() || null
+  const [heroImageSrc, setHeroImageSrc] = useState(heroImagePrimary)
+
+  useEffect(() => {
+    setHeroImageSrc(heroImagePrimary)
+  }, [heroImagePrimary])
+
+  function onHeroImageError() {
+    if (heroImageRaw && heroImageSrc !== heroImageRaw) {
+      setHeroImageSrc(heroImageRaw)
+    }
+  }
+
   return (
     <section
       ref={heroRef}
       className={`menu-hero${nativeAndroid ? ' menu-hero--native-android' : ''}`}
     >
-      {settings.hero_image_url ? (
+      {heroImageSrc ? (
         <motion.div
           className="menu-hero-backdrop"
           style={staticHero ? undefined : { y: backdropY, scale: backdropScale }}
           aria-hidden
         >
-          <img src={settings.hero_image_url} alt="" className="menu-hero-backdrop-img" />
+          <img
+            src={heroImageSrc}
+            alt=""
+            className="menu-hero-backdrop-img"
+            decoding="async"
+            onError={onHeroImageError}
+          />
         </motion.div>
       ) : null}
       <motion.div
@@ -117,9 +138,9 @@ export function MenuHero({ settings, language }: Props) {
             className="menu-hero-visual"
             style={staticHero ? undefined : { y: visualY, rotate: visualRotate, scale: visualScale }}
           >
-            {settings.hero_image_url ? (
+            {heroImageSrc ? (
               <motion.img
-                src={settings.hero_image_url}
+                src={heroImageSrc}
                 alt={
                   language === 'ar'
                     ? `${title} - صورة رئيسية للقائمة`
@@ -127,7 +148,9 @@ export function MenuHero({ settings, language }: Props) {
                 }
                 className="menu-hero-img"
                 loading="eager"
+                fetchPriority="high"
                 decoding="async"
+                onError={onHeroImageError}
                 style={staticHero ? undefined : { y: imageY, scale: imageScale }}
               />
             ) : (
